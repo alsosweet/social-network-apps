@@ -1,1 +1,39 @@
 /* Empty. Add your own CSS if you like */
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
+}
+.scroll {
+  min-width: 100%;
+}
+.who-look-at-me {
+  border:0px;
+}
+
+.myrow{
+  border:0px;
+  margin:0px;
+  padding: 0px;
+}
+
+.col.mycol .mycol{
+  border:0px;
+  margin:0px;
+  padding: 1px;
+  margin-bottom:0px;!important;
+}
+
+.responsive-lg .col{
+  margin-bottom:0px;!important;
+  padding: 0px;
+}
+
+.pos-absolute-right {position: absolute; right: 3px;}
+
+.view-tabs-top .has-header{
+  top: 93px;
+}
+
+.myavatar {
+  border-radius: 4px;
+}

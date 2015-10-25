@@ -22,6 +22,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   });
 })
+  .config(function($ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position('bottom');
+  })
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -50,7 +53,25 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
-  .state('tab.chats', {
+  .state('tab.emails', {
+      url: '/emails',
+      views: {
+        'tab-emails': {
+          templateUrl: 'templates/tab-emails.html',
+          controller: 'EmailsCtrl'
+        }
+      }
+    })
+    .state('tab.email-detail', {
+      url: '/emails/:chatId',
+      views: {
+        'tab-emails': {
+          templateUrl: 'templates/email-detail.html',
+          controller: 'EmailDetailCtrl'
+        }
+      }
+    })
+    .state('tab.chats', {
       url: '/chats',
       views: {
         'tab-chats': {
@@ -68,7 +89,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
-
+    .state('tab.profile', {
+      url: '/profile',
+      views: {
+        'tab-profile': {
+          templateUrl: 'templates/tab-profile.html',
+          controller: 'ProfileCtrl'
+        }
+      }
+    })
   .state('tab.account', {
     url: '/account',
     views: {

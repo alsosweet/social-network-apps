@@ -1,0 +1,81 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="我">
+  <ion-content class="padding">
+    <div class="list card">
+
+      <a class="item item-thumbnail-left" href="#">
+        <img src="http://lorempixel.com/60/60">
+        <h2>Pretty Hate Machine</h2>
+        <p>Nine Inch Nails</p>
+      </a>
+
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-pricetags"></i>
+          签到
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-chatbox"></i>
+          个人资料
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-share"></i>
+          交友资料
+        </a>
+      </div>
+
+      <div class="item "><span>谁看了我</span></div>
+
+      <ion-scroll direction="x" class="wide-as-needed">
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+      </ion-scroll>
+    </div>
+
+    <div class="list">
+
+      <a href="#" class="item item-icon-left item-icon-right">
+        <i class="icon ion-home"></i>
+        Enter home address
+        <span class="badge badge-assertive">{{num}}</span>
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+      <a href="#" class="item item-icon-left item-icon-right">
+        <i class="icon ion-ios-telephone"></i>
+        Enter phone number
+        <span class="badge badge-assertive">8</span>
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+
+      <a href="#" class="item item-icon-left">
+        <i class="icon ion-wifi"></i>
+        Enter wireless password
+      </a>
+
+      <a href="#" class="item item-icon-left">
+        <i class="icon ion-card"></i>
+        Enter card information
+      </a>
+
+    </div>
+
+    <div class="list">
+      <a href="#" class="item item-icon-left">
+        <i class="icon ion-home"></i>
+        Enter home address
+      </a>
+    </div>
+  </ion-content>
+</ion-view>

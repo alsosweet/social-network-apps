@@ -1,13 +1,19 @@
-<ion-view view-title="Chats">
-  <ion-content>
+<ion-view view-title="收到招呼">
+  <ion-content ng-init="loadMessages()">
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+      <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="message in messages" type="item-text-wrap" href="#">
+        <img class ="myavatar" ng-src="{{message.src}}">
+        <p class="pos-absolute-right">2015-10-24</p>
+        <h2>{{message.name}}大傻逼xxxx</h2>
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+        <p>{{message.age}}岁</p>
+        <img ng-src="http://lorempixel.com/20/20"><span>你好吗，最近过的怎么样</span>
+        <!--<i class="icon ion-chevron-right icon-accessory">回招呼</i>-->
+        <button class="button button-outline button-small button-positive pos-absolute-right">
+          回招呼
+        </button>
+
+        <ion-option-button class="button-assertive" ng-click="">
           Delete
         </ion-option-button>
       </ion-item>
