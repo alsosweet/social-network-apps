@@ -37,3 +37,124 @@
 .myavatar {
   border-radius: 4px;
 }
+/*添加item-content无效，请再参考书籍看如何改scss*/
+.item-content{
+  padding-bottom:10px;
+}
+
+.title-info{
+  padding : 12px;
+  border: 0px;
+  font-family: 'Helvetica Neue', Roboto, 'Segoe UI', sans-serif !important;
+  color: #444;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+
+/* tab-emails 的另一种表现方式
+.card button{
+  margin-top: -0.7em !important;
+  margin-right: -0.5em !important;
+  margin-bottom: -1em !important;
+  margin-left: -1em !important;
+}
+.name{
+  color:red;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.event{
+  color:blue;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.card-margin {
+  margin-top: 1em !important;
+  margin-bottom: 0em !important;
+}
+
+.inset {
+  margin-top: -1em !important;
+  margin-right: -0.5em !important;
+  margin-bottom: -1em !important;
+  margin-left: -1em !important;
+}
+
+.feedtext{
+  margin-top:-2 em;
+  font-size: 0.1em;
+}
+
+.like{
+  font-size: 0.9em;
+}
+
+.footer-button{
+  marign-right: 1em;
+  margin-left: 1em;
+}
+.inner-scroll{
+  padding-top:0px!important;
+  margin-top:9.5em!important;
+}
+
+.card .photo{
+  margin-top:2em;
+  margin-left:-5em;
+}
+
+.footer-block{
+  margin-top:-0.1em !important;
+}*/
+
+/*image fullscreen*/
+.transparent {
+  background: transparent !important;
+}
+.image-modal {
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+}
+.fullscreen-image {
+  max-width: 100%;
+  max-height: 100%;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+/* Fix modal backdrop for smaller devices */
+@media (max-width: 679px) {
+  .active .modal-backdrop-bg {
+    opacity: .5;
+  }
+  .modal-backdrop-bg {
+    -webkit-transition: opacity 300ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
+    background-color: #000;
+    opacity: 0;
+  }
+}
+
+/*foot bar button*/
+.bar-footer.footer-buttons{
+  padding: 0px;
+}
+.bar-footer.footer-buttons .row{
+  padding: 0px;
+}
+.bar-footer.footer-buttons .row .col{
+  text-align: center;
+}
+
+.card.inner-monologue{
+  margin: 0px;
+}

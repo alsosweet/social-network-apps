@@ -1,0 +1,155 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="个人空间" hide-back-button="true">
+
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-dark" ng-click="$ionicGoBack()">
+      <i class="icon ion-ios-arrow-left"></i>
+      返回
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-dark" ng-click="optionsClick()">
+      <i class="icon ion-ios-refresh-empty"></i>
+      换一个
+    </button>
+  </ion-nav-buttons>
+
+  <ion-content class="padding has-footer">
+    <div class="list card">
+
+      <a class="item item-thumbnail-left" ng-click="showImage(3)">
+        <img src="http://lorempixel.com/60/60" >
+        <h2>Pretty Hate Machine</h2>
+        <p>广东-深圳</p>
+        <p>19岁</p>
+      </a>
+
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item positive" href="#">
+          <i class="icon ion-ios-wineglass"></i>
+          申请见面
+        </a>
+        <a class="tab-item positive" ng-show="relationship" ng-click="relationship = !relationship">
+          <i class="icon ion-ios-heart-outline"></i>
+          取消关注
+        </a>
+        <a class="tab-item positive" ng-show="!relationship" ng-click="relationship = !relationship">
+          <i class="icon ion-ios-heart-outline"></i>
+          关注我吧
+        </a>
+        <a class="tab-item positive" href="#">
+          <i class="icon ion-share"></i>
+          QQ微信
+        </a>
+      </div>
+
+
+      <div class="title-info "><span>最近收到的礼物</span></div>
+      <ion-scroll direction="x" class="wide-as-needed">
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+      </ion-scroll>
+    </div>
+
+    <div class="title-info"><span>基本资料</span></div>
+
+    <div class="list">
+      <a class="item">
+        婚姻
+        <span class="item-note positive">单身</span>
+      </a>
+      <a class="item">
+        身高
+        <span class="item-note positive">158cm</span>
+      </a>
+      <a class="item">
+        职业
+        <span class="item-note positive">个体户</span>
+      </a>
+      <a class="item">
+        学历
+        <span class="item-note positive">高中</span>
+      </a>
+    </div>
+    <div class="title-info "><span>个人空间</span></div>
+
+    <div class="list">
+      <a class="item">
+        交友目的
+        <span class="item-note positive">都可以啦</span>
+      </a>
+      <a class="item">
+        外貌评价
+        <span class="item-note positive">秀外慧中</span>
+      </a>
+      <a class="item">
+        恋爱观念
+        <span class="item-note positive">顺其自然</span>
+      </a>
+      <a class="item">
+        首次见面希望
+        <span class="item-note positive">如果喜欢，可以家里爱爱</span>
+      </a>
+      <a class="item">
+        喜欢爱爱地点
+        <span class="item-note positive">在我家</span>
+      </a>
+
+    </div>
+    <div class="title-info "><span>内心独白</span></div>
+    <div class="card inner-monologue">
+      <div class="item item-text-wrap">
+        This is a basic Card which contains an item that has wrapping text.
+        This is a basic Card which contains an item that has wrapping text.
+      </div>
+    </div>
+
+    <div class="">
+      <button ng-click="" class="button button-block button-light">
+        举报
+      </button>
+    </div>
+  </ion-content>
+
+<!--  <div class="bar bar-footer">
+    <button class="button button-clear button-dark">
+      <i class=""></i>
+      招呼
+    </button>
+    <button class="button button-clear button-dark button-center">
+      <i class=""></i>
+      写私信
+    </button>
+    <button class="button button-clear button-dark">
+      <i></i>
+      送礼物
+    </button>
+  </div>
+-->
+  <div class="bar bar-footer bar-light footer-buttons">
+    <div class="row">
+      <div class="col">
+        <button class="button button-clear icon-left ion-ios-paperplane-outline" ng-click="sayhi()">打招呼</button>
+      </div>
+      <div class="col">
+        <button class="button button-clear icon-left ion-ios-email-outline" ng-click="sendeamil()">写私信</button>
+      </div>
+      <div class="col">
+        <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="sendAGift()">送礼物</button>
+      </div>
+    </div>
+  </div>
+
+</ion-view>
