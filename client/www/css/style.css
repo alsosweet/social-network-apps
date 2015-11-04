@@ -51,7 +51,20 @@
   white-space: nowrap;
 }
 
+.item p{
 
+}
+
+@media (min-width: 100px) {
+  .mymodal {
+    width: 70%;
+    height: 40%;
+    top: 30%;
+    left: 15%;
+    right: 15%;
+    bottom: 30%;
+  }
+}
 /* tab-emails 的另一种表现方式
 .card button{
   margin-top: -0.7em !important;

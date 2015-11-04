@@ -111,6 +111,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
       url: '/event/:eventId',
       templateUrl: 'templates/friend-profile.html',
       controller: 'FriendProfileCtrl'
+    })
+    .state('emailSending', {
+      url: '/emailSending/:sendId',
+      templateUrl: 'templates/email-sending.html',
+      controller: 'EmailSendingCtrl'
     });
 
   // if none of the above states are matched, use this as the fallback

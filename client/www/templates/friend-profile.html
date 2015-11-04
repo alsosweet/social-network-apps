@@ -22,7 +22,7 @@
   <ion-content class="padding has-footer">
     <div class="list card">
 
-      <a class="item item-thumbnail-left" ng-click="showImage(3)">
+      <a class="item item-thumbnail-left" ng-click="">
         <img src="http://lorempixel.com/60/60" >
         <h2>Pretty Hate Machine</h2>
         <p>广东-深圳</p>
@@ -31,7 +31,7 @@
 
 
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item positive" href="#">
+        <a class="tab-item positive" ng-click="applyMeet()">
           <i class="icon ion-ios-wineglass"></i>
           申请见面
         </a>
@@ -43,7 +43,7 @@
           <i class="icon ion-ios-heart-outline"></i>
           关注我吧
         </a>
-        <a class="tab-item positive" href="#">
+        <a class="tab-item positive" ng-click="showConfirm()">
           <i class="icon ion-share"></i>
           QQ微信
         </a>
@@ -52,14 +52,14 @@
 
       <div class="title-info "><span>最近收到的礼物</span></div>
       <ion-scroll direction="x" class="wide-as-needed">
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/1.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/2.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/3.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/4.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/5.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/6.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/7.gif"></a>
+        <a href="#"><img class = "myavatar" src="img/gift/8.gif"></a>
       </ion-scroll>
     </div>
 
@@ -144,10 +144,10 @@
         <button class="button button-clear icon-left ion-ios-paperplane-outline" ng-click="sayhi()">打招呼</button>
       </div>
       <div class="col">
-        <button class="button button-clear icon-left ion-ios-email-outline" ng-click="sendeamil()">写私信</button>
+        <button class="button button-clear icon-left ion-ios-email-outline" ui-sref="emailSending({sendId:12})">写私信</button>
       </div>
       <div class="col">
-        <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="sendAGift()">送礼物</button>
+        <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="showImage(3)">送礼物</button>
       </div>
     </div>
   </div>

@@ -8,7 +8,8 @@ angular.module('starter.factory', [])
        twitts.push({
         avatar : "http://lorempixel.com/60/60",
         age : i,
-        dist:i+100
+        dist:i+100,
+         id:i
       });
 
     }
@@ -46,3 +47,31 @@ angular.module('starter.factory', [])
 
     return service;
   })
+  .factory('Loader', ['$ionicLoading', '$timeout', function($ionicLoading, $timeout) {
+
+    var LOADERAPI = {
+
+      showLoading: function(text) {
+        text = text || 'Loading...';
+        $ionicLoading.show({
+          template: text
+        });
+      },
+
+      hideLoading: function() {
+        $ionicLoading.hide();
+      },
+
+      toggleLoadingWithMessage: function(text, timeout) {
+        var self = this;
+
+        self.showLoading(text);
+
+        $timeout(function() {
+          self.hideLoading();
+        }, timeout || 2000);
+      }
+
+    };
+    return LOADERAPI;
+  }])

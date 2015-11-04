@@ -16,7 +16,7 @@
         <div class="col col-33" ng-if="$index < twitts.length">
 
           <div class="item item-image">
-            <img ng-src="{{twitts[$index].avatar}}" width="100%" ui-sref="event({eventId:email.id})">
+            <img ng-src="{{twitts[$index].avatar}}" width="100%" ui-sref="event({eventId:twitts[$index].id})">
           </div>
         <span class="assertive">
           {{twitts[$index].dist}}米

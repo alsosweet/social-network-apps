@@ -95,14 +95,32 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
 })
-  .controller('FriendProfileCtrl', ['$scope', '$ionicModal',
-    function ($scope, $ionicModal) {
+  .controller('FriendProfileCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams',
+    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+
+      // A confirm dialog
+      $scope.showConfirm = function() {
+        var confirmPopup = $ionicPopup.confirm({
+          title: '查看QQ(微信)号',
+          template: '钻石会员才能查看QQ或微信号，你还不是钻石会员'
+        }).then(function(res) {
+          if(res) {
+            console.log('You are sure');
+          } else {
+            console.log('You are not sure');
+          }
+        });
+      };
+
+      $scope.applyMeet = function(){
+        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请');
+      }
 
       $scope.relationship = false;
 
-      $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+      $ionicModal.fromTemplateUrl('templates/gift-modal.html', {
         scope: $scope,
-        animation: 'slide-in-up'
+        animation: 'fade-in-scale'
       }).then(function(modal) {
         $scope.modal = modal;
       });
@@ -112,20 +130,24 @@ angular.module('starter.controllers', [])
       };
 
       $scope.closeModal = function() {
+        console.log('Modal is closeModal!');
         $scope.modal.hide();
       };
 
       //Cleanup the modal when we're done with it!
       $scope.$on('$destroy', function() {
+        console.log('Modal is $destroy!');
         $scope.modal.remove();
       });
       // Execute action on hide modal
       $scope.$on('modal.hide', function() {
         // Execute action
+        console.log('Modal is hide!');
       });
       // Execute action on remove modal
       $scope.$on('modal.removed', function() {
         // Execute action
+        console.log('Modal is removed!');
       });
       $scope.$on('modal.shown', function() {
         console.log('Modal is shown!');
@@ -148,5 +170,29 @@ angular.module('starter.controllers', [])
         }
         $scope.openModal();
       }
+
+
+      //gift
+      $scope.gifts=[];
+      for(var i = 1; i<=15; i++){
+        $scope.gifts.push({
+          src:'img/gift/'+i+'.gif'
+        });
+      }
+    }
+  ]).controller('EmailSendingCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams',
+    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+
+      var sendId = $stateParams.sendId;
+
+      $scope.applyMeet = function(){
+        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请');
+      }
+
+
+      $scope.sendEmail = function() {
+        console.log(sendId);
+      }
+
     }
   ]);
