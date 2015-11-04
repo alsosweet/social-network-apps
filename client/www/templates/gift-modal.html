@@ -1,0 +1,49 @@
+<ion-modal-view class="ion-nifty-modal">
+<div class="ion-modal-content-custom" ng-click="closeModal()">
+  <ion-pane class="">
+
+    <div class="row" ng-repeat="gift in gifts" ng-if="$index % 5 === 0">
+      <div class="col col-20" ng-if="$index < gifts.length">
+        <div class="item item-image">
+          <img ng-src="{{gifts[$index].src}}" width="48px" height="48px" ui-sref="#">
+        </div>
+      </div>
+
+      <div class="col col-20" ng-if="$index + 1< gifts.length">
+        <div class="item item-image">
+          <img ng-src="{{gifts[$index+1].src}}" width="48px" height="48px" ui-sref="#">
+        </div>
+      </div>
+
+      <div class="col col-20" ng-if="$index + 2< gifts.length">
+        <div class="item item-image">
+          <img ng-src="{{gifts[$index+2].src}}" width="48px" height="48px" ui-sref="#">
+        </div>
+      </div>
+
+      <div class="col col-20" ng-if="$index + 3< gifts.length">
+        <div class="item item-image">
+          <img ng-src="{{gifts[$index+3].src}}" width="48px" height="48px" ui-sref="#">
+        </div>
+      </div>
+
+      <div class="col col-20" ng-if="$index + 4< gifts.length">
+        <div class="item item-image">
+          <img ng-src="{{gifts[$index+4].src}}" width="48px" height="48px" ui-sref="#">
+        </div>
+      </div>
+    </div>
+
+  </ion-pane>
+</div>
+</ion-modal-view>
+<!--
+<ion-modal-view class="ion-nifty-modal">
+  <div class="ion-modal-content-custom">
+    <ion-content class="padding">
+      <button class="button button-full button-positive" ng-click="closeModal()">Close Modal</button>
+      Options: 'slide-in-up', 'slide-in-down', 'fade-in-scale', 'fade-in-right', 'fade-in-left', 'newspaper', 'jelly', 'road-runner', 'splat', 'spin', 'swoosh', 'fold-unfold'
+    </ion-content>
+  </div>
+</ion-modal-view>
+-->

@@ -1,0 +1,31 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="写私信" hide-back-button="true">
+
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-dark" ng-click="$ionicGoBack()">
+      <i class="icon ion-ios-arrow-left"></i>
+      返回
+    </button>
+  </ion-nav-buttons>
+
+  <ion-content class="padding">
+
+  <h5>普通会员发信，对方钻石会员才能查看</h5>
+  <h5 class="assertive">钻石会员发信，普通会员免费查看</h5>
+  <h4 class="positive">马上升级钻石会员</h4>
+    <label class="item item-input">
+      <textarea rows="12" cols="40" ng-model="input.message" value="" placeholder="Send a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+    </label>
+    <div class="">
+      <button ng-click="sendEmail()" class="button button-block button-light">
+        发送
+      </button>
+    </div>
+  </ion-content>
+
+</ion-view>
