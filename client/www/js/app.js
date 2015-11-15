@@ -107,6 +107,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
       }
     }
   })
+    .state('personalInfo', {
+      url: '/personalinfo',
+      templateUrl: 'templates/personal-info.html',
+      controller: 'PersonalInfoCtrl'
+    })
     .state('event', {
       url: '/event/:eventId',
       templateUrl: 'templates/friend-profile.html',

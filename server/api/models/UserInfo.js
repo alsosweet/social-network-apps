@@ -8,6 +8,11 @@
 module.exports = {
   connection: 'jiayuanMysqlServer',
   tableName: 'qing_userinfo',
+
+/*   migrate: 'safe' by hand.*/
+//  autoCreatedAt: false,
+//  autoUpdatedAt: false,
+
   attributes: {
     userid: {
       type: 'integer',
@@ -16,7 +21,8 @@ module.exports = {
       primaryKey: true,
       columnName: 'userid'
     },
-    /*ÓÃ»§ÃûÒ²ÊÇÕËºÅ£¬emailºÍÓÃ»§Ãû¾ù¿ÉÓÃÓÚµÇÂ½*/
+    /*windows ç‰ˆæœ¬ç¼–è¾‘çš„ä¸­æ–‡ï¼Œåœ¨Macé‡Œæ˜¾ç¤ºä¹±ç ã€‚æš‚æ—¶æ²¡ç©ºæŸ¥åŸå› */
+    /*ï¿½Ã»ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ËºÅ£ï¿½emailï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Â½*/
     username: {
       type: 'string',
       size:20,
@@ -29,7 +35,7 @@ module.exports = {
       type: 'string',
       size:100,
     },
-    /*email Î¨Ò»¡£ÓÃÓÚµÇÂ½¡£sizeÌ«Ğ¡ÁË°É£¿£¿*/
+    /*email Î¨Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Â½ï¿½ï¿½sizeÌ«Ğ¡ï¿½Ë°É£ï¿½ï¿½ï¿½*/
     email: {
       type: 'string',
       size:20,
@@ -159,22 +165,22 @@ module.exports = {
       type: 'string',
       size:100,
     },
-    /* 0ÉóºËÎ´Í¨¹ı£¬1Í¨¹ı*/
+    /* 0ï¿½ï¿½ï¿½Î´Í¨ï¿½ï¿½1Í¨ï¿½ï¿½*/
     image_status: {
       type: 'integer',
       size: 2,
     },
-    /* ÊÇ·ñÎªÍÆ¼ö»áÔ±*/
+    /* ï¿½Ç·ï¿½Îªï¿½Æ¼ï¿½ï¿½ï¿½Ô±*/
     sign: {
       type: 'integer',
       size: 5,
     },
-    /* µÈ¼¶0,1,2,3,4,5*/
+    /* ï¿½È¼ï¿½0,1,2,3,4,5*/
     vip: {
       type: 'integer',
       size: 5,
     },
-    /* µ½ÆÚÊ±¼ä*/
+    /* ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½*/
     vip_time: {
       type: 'integer',
       size: 10,
@@ -184,12 +190,12 @@ module.exports = {
       type: 'integer',
       size: 10,
     },
-    /* »ı·Ö*/
+    /* ï¿½ï¿½ï¿½*/
     point: {
       type: 'integer',
       size: 10,
     },
-    /* ÓÎÏ·»ı·Ö*/
+    /* ï¿½ï¿½Ï·ï¿½ï¿½ï¿½*/
     game_point: {
       type: 'integer',
       size: 20,
@@ -203,7 +209,7 @@ module.exports = {
       type:'string',
       size:50,
     },
-    /* 1¶³½á£¬0Õı³£*/
+    /* 1ï¿½ï¿½ï¿½á£¬0ï¿½ï¿½*/
     freeze: {
       type: 'integer',
       size: 10,
@@ -233,7 +239,7 @@ module.exports = {
       type: 'integer',
       size: 10,
     },
-    /* ×¢²áÓÃ»§À´Ô´*/
+    /* ×¢ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ô´*/
     ad_id: {
       type: 'integer',
       size: 10,

@@ -1,0 +1,108 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="个人资料" hide-back-button="true">
+
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-dark" ng-click="$ionicGoBack()">
+      <i class="icon ion-ios-arrow-left"></i>
+      返回
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-dark" ng-click="optionsClick()">
+      <i class="icon ion-ios-refresh-empty"></i>
+      保存
+    </button>
+  </ion-nav-buttons>
+
+  <ion-content class="padding">
+    <div class="list">
+
+      <a ng-click="showPopup()" class="item item-icon-right my-item">
+        QQ号(微信)
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a ng-click="showPopup2()" class="item item-icon-right my-item">
+        年龄
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Lightsaber
+        </div>
+        <select>
+          <option>Blue</option>
+          <option selected>Green</option>
+          <option>Red</option>
+        </select>
+      </label>
+      <a href="#" class="item item-icon-right my-item">
+        学历
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        身高
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        婚恋
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        职业
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+
+      <a href="#" class="item item-icon-right my-item">
+        出生省份
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        出生城市
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+    </div>
+<!--以下敏感内容，一经填写，不可修改-->
+    <div class="list">
+      <a href="#" class="item item-icon-right my-item">
+        邮箱
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        密码
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+
+      <a href="#" class="item item-icon-right my-item">
+        昵称
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        性别
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+      <a href="#" class="item item-icon-right my-item">
+        所在地
+        <span class="item-note positive my-item-note">未填写</span>
+        <i class="icon my-icon ion-ios-arrow-right positive"></i>
+      </a>
+    </div>
+  </ion-content>
+
+</ion-view>

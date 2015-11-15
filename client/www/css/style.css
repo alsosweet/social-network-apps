@@ -37,7 +37,19 @@
 .myavatar {
   border-radius: 4px;
 }
-/*添加item-content无效，请再参考书籍看如何改scss*/
+
+.item-note.my-item-note{
+  font-size:16px;
+}
+
+.item-icon-right.my-item{
+  padding-right: 32px;
+}
+.item-icon-right .icon.my-icon{
+  right: 1px;
+  font-size: 28px;
+}
+  /*添加item-content无效，请再参考书籍看如何改scss*/
 .item-content{
   padding-bottom:10px;
 }

@@ -37,8 +37,10 @@ module.exports = {
             return res.json({VarMessageStep2: r});
         });
     },
+
     viewUserInfo: function(req, res){
         UserInfo.find({userid:1}).exec(function(e, r){
+            if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
             return res.json({UserInfo: r});
         });
     },

@@ -34,8 +34,9 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
-
+  },
+  'get /browse/userinfo/:id?':'BrowseController.viewUserInfo',
+  'get /browse/:page?':'BrowseController.viewUserPage',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

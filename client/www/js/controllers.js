@@ -4,12 +4,12 @@ angular.module('starter.controllers', [])
     $scope.city = '深圳';
     //$ionicNavBarDelegate.align('center');
     TwittSrv.getTwitts().then(function(twitts){
-      $scope.twitts = twitts;
+      $scope.twitts = twitts.data.UserInfo;
     });
 
     $scope.doRefresh = function(){
       TwittSrv.getNewTwitts().then(function(newTwitts){
-        $scope.twitts = newTwitts.concat($scope.twitts);
+        $scope.twitts = newTwitts.data.UserInfo;
       }).finally(function() {
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
@@ -18,7 +18,7 @@ angular.module('starter.controllers', [])
 
     $scope.loadMore = function(){
       TwittSrv.getMoreTwitts().then(function(olderTwitts){
-        $scope.twitts = $scope.twitts.concat(olderTwitts);
+        $scope.twitts = $scope.twitts.concat(olderTwitts.data.UserInfo);
       }).finally(function() {
         // Stop the ion-infinite-scroll from spinning
         $scope.$broadcast('scroll.infiniteScrollComplete');
@@ -41,7 +41,7 @@ angular.module('starter.controllers', [])
       for(var i = 0; i < 30; i++) {
         $scope.emails.push({
           name: 'name:'+i,
-          src: "http://lorempixel.com/60/60",
+          src: "http://192.168.1.103:1337/favicon.ico",
           age:i,
           id:i,
           lastText:i+'messages example'
@@ -55,7 +55,7 @@ angular.module('starter.controllers', [])
       for(var i = 0; i < 30; i++) {
         $scope.sendemails.push({
           name: 'name:'+i,
-          src: "http://lorempixel.com/60/60",
+          src: "http://192.168.1.103:1337/favicon.ico",
           age:i,
           id:i,
           lastText:i+'messages example'
@@ -74,7 +74,7 @@ angular.module('starter.controllers', [])
       for(var i = 0; i < 20; i++) {
         $scope.messages.push({
           name: 'name:'+i,
-          src: "http://lorempixel.com/60/60",
+          src: "http://192.168.1.103:1337/favicon.ico",
           age:i,
           lastText:i+'messages example'
         });
@@ -117,16 +117,14 @@ angular.module('starter.controllers', [])
       }
 
       $scope.relationship = false;
-
-      $ionicModal.fromTemplateUrl('templates/gift-modal.html', {
-        scope: $scope,
-        animation: 'fade-in-scale'
-      }).then(function(modal) {
-        $scope.modal = modal;
-      });
-
-      $scope.openModal = function() {
-        $scope.modal.show();
+      $scope.openModal = function(tempobj, animation) {
+          $ionicModal.fromTemplateUrl(tempobj.url, {
+            scope: $scope,
+            animation: animation
+          }).then(function(modal) {
+            $scope.modal = modal;
+            $scope.modal.show();
+          });
       };
 
       $scope.closeModal = function() {
@@ -153,6 +151,9 @@ angular.module('starter.controllers', [])
         console.log('Modal is shown!');
       });
 
+      var tempobj={};
+      tempobj.url = 'templates/gift-modal.html';
+
       //需要用promise或其他方法，否则加载完成前显示默认图片
       $scope.imageSrc = 'http://ionicframework.com/img/ionic-logo-blog.png';
 
@@ -165,10 +166,10 @@ angular.module('starter.controllers', [])
             $scope.imageSrc  = 'http://ionicframework.com/img/ionic_logo.svg';
             break;
           case 3:
-            $scope.imageSrc  = 'http://lorempixel.com/280/360';
+            $scope.imageSrc  = 'http://192.168.1.103:1337/favicon.ico';
             break;
         }
-        $scope.openModal();
+        $scope.openModal(tempobj, 'slide-in-up');
       }
 
 
@@ -179,6 +180,14 @@ angular.module('starter.controllers', [])
           src:'img/gift/'+i+'.gif'
         });
       }
+
+      var tempobj1={};
+      tempobj1.url = 'templates/say-hi.html';
+
+      $scope.sayhi = function(){
+          $scope.openModal(tempobj1, 'slide-in-up');
+      }
+
     }
   ]).controller('EmailSendingCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams',
     function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
@@ -194,5 +203,59 @@ angular.module('starter.controllers', [])
         console.log(sendId);
       }
 
+    }
+  ]).controller('PersonalInfoCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams','$timeout',
+    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {
+
+      console.log('个人资料');
+// Triggered on a button click, or some other target
+      $scope.showPopup = function() {
+        $scope.data = {}
+      // An elaborate, custom popup
+      var myPopup = $ionicPopup.show({
+        template: '<input type="number" name="QQ" ng-model="data.wifi" ng-maxlength="4"><p ng-show="QQ.$error.maxlength">长度超过20.</p>',
+        title: '请输入QQ号或微信号',
+        scope: $scope,
+        buttons: [
+          { text: '取消' },
+          {
+            text: '<b>确定</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              if (!$scope.data.wifi) {
+                //don't allow the user to close unless he enters wifi password
+                e.preventDefault();
+              } else {
+                return $scope.data.wifi;
+              }
+            }
+          }
+        ]
+      });
+      myPopup.then(function(res) {
+        console.log('Tapped!', res);
+      });
+      $timeout(function() {
+        myPopup.close(); //close the popup after 3 seconds for some reason
+      }, 30000);
+    };
+
+
+// Triggered on a button click, or some other target
+      $scope.showPopup2 = function() {
+        $scope.data = {}
+        // An elaborate, custom popup
+        $scope.myPopup = $ionicPopup.show({
+          templateUrl: 'templates/age-list.html',
+          title: '年龄',
+          scope: $scope,
+        });
+        $scope.myPopup.then(function(res) {
+          console.log('Tapped!', res);
+        });
+        $timeout(function() {
+          $scope.myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 300000);
+      };
     }
   ]);
