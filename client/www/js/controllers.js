@@ -1,5 +1,103 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['compareTo'])
+  .controller('TabCtrl', ['$rootScope', '$ionicModal', 'AuthFactory', '$location', 'UserFactory', '$scope', 'Loader',
+    function($rootScope, $ionicModal, AuthFactory, $location, UserFactory, $scope, Loader) {
 
+      $rootScope.$on('showLoginModal', function($event, scope, cancelCallback, callback) {
+
+        $scope = scope || $scope;
+
+        $scope.user = {
+          email: '',
+          password: '',
+          password2: '',
+        };
+        $scope.viewLogin = true;
+
+        $ionicModal.fromTemplateUrl('templates/login.html', {
+          scope: $scope
+        }).then(function(modal) {
+          $scope.modal = modal;
+          $scope.modal.show();
+
+          $scope.switchTab = function(tab) {
+            if (tab === 'login') {
+              $scope.viewLogin = true;
+            } else {
+              $scope.viewLogin = false;
+            }
+          }
+
+          $scope.hide = function() {
+            $scope.modal.hide();
+            if (typeof cancelCallback === 'function') {
+              cancelCallback();
+            }
+          }
+
+          $scope.login = function() {
+            Loader.showLoading('验证中...');
+
+            UserFactory.login($scope.user).success(function(data) {
+
+              data = data.MyInfo;
+              AuthFactory.setUser(data.user);
+              AuthFactory.setToken({
+                token: data.token,
+                expires: data.expires
+              });
+
+              $rootScope.isAuthenticated = true;
+              $scope.modal.hide();
+              Loader.hideLoading();
+              if (typeof callback === 'function') {
+                callback();
+              }
+            }).error(function(err, statusCode) {
+              Loader.hideLoading();
+              Loader.toggleLoadingWithMessage(err);
+            });
+          }
+
+          $scope.register = function() {
+            Loader.showLoading('等待...');
+
+            UserFactory.register($scope.user).success(function(data) {
+
+              data = data.MyInfo;
+              AuthFactory.setUser(data.user);
+              AuthFactory.setToken({
+                token: data.token,
+                expires: data.expires
+              });
+
+              $rootScope.isAuthenticated = true;
+              Loader.hideLoading();
+              $scope.modal.hide();
+              if (typeof callback === 'function') {
+                callback();
+              }
+            }).error(function(err, statusCode) {
+              Loader.hideLoading();
+              Loader.toggleLoadingWithMessage(err);
+            });
+          }
+        });
+      });
+
+      $rootScope.loginFromMenu = function() {
+        $rootScope.$broadcast('showLoginModal', $scope, null, null);
+      }
+
+      $rootScope.logout = function() {
+        UserFactory.logout();
+        $rootScope.isAuthenticated = false;
+        $location.path('/tab/dash');
+        Loader.toggleLoadingWithMessage('注销成功!', 2000);
+      }
+
+
+    }
+  ])
 .controller('DashCtrl', function($scope, $ionicNavBarDelegate,TwittSrv) {
     $scope.city = '深圳';
     //$ionicNavBarDelegate.align('center');
@@ -27,8 +125,41 @@ angular.module('starter.controllers', [])
 
   })
 
-.controller('EmailsCtrl', function($scope, Chats) {
-    $scope.active_content = 'orders';
+.controller('EmailsCtrl', ['$scope', 'AuthFactory', '$rootScope', '$location', '$timeout', 'UserFactory', 'Loader','Chats',
+      function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
+
+        $scope.active_content = 'orders';
+
+        $scope.$on('getEmails', function() {
+          Loader.showLoading('Fetching Your Cart..');
+          //loadEmails();
+          Loader.hideLoading();
+          /*
+
+          UserFactory.getCartItems().success(function(data) {
+            $scope.books = data.data;
+            Loader.hideLoading();
+          }).error(function(err, statusCode) {
+            Loader.hideLoading();
+            Loader.toggleLoadingWithMessage(err.message);
+          });*/
+        });
+
+        if (!AuthFactory.isLoggedIn()) {
+          $rootScope.$broadcast('showLoginModal', $scope, function() {
+            // cancel auth callback
+            $timeout(function() {
+              $location.path('/tab/dash');
+            }, 200);
+          }, function() {
+            // user is now logged in
+            $scope.$broadcast('getEmails');
+          });
+          return;
+        }
+
+        $scope.$broadcast('getEmails');
+
     $scope.setActiveContent = function(active_content){
       $scope.active_content = active_content;
     }
@@ -37,11 +168,11 @@ angular.module('starter.controllers', [])
     }
     $scope.emails = [];
 //从services里面取数据  Preload images in Ionic using $ImageCacheFactory
-    $scope.loadEmails = function() {
+    var loadEmails = function() {
       for(var i = 0; i < 30; i++) {
         $scope.emails.push({
           name: 'name:'+i,
-          src: "http://192.168.1.103:1337/favicon.ico",
+          src: "http://localhost:1337/favicon.ico",
           age:i,
           id:i,
           lastText:i+'messages example'
@@ -55,14 +186,14 @@ angular.module('starter.controllers', [])
       for(var i = 0; i < 30; i++) {
         $scope.sendemails.push({
           name: 'name:'+i,
-          src: "http://192.168.1.103:1337/favicon.ico",
+          src: "http://localhost:1337/favicon.ico",
           age:i,
           id:i,
           lastText:i+'messages example'
         });
       }
     }
-})
+}])
   .controller('EmailDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
   })
@@ -74,7 +205,7 @@ angular.module('starter.controllers', [])
       for(var i = 0; i < 20; i++) {
         $scope.messages.push({
           name: 'name:'+i,
-          src: "http://192.168.1.103:1337/favicon.ico",
+          src: "http://localhost:1337/favicon.ico",
           age:i,
           lastText:i+'messages example'
         });
@@ -166,7 +297,7 @@ angular.module('starter.controllers', [])
             $scope.imageSrc  = 'http://ionicframework.com/img/ionic_logo.svg';
             break;
           case 3:
-            $scope.imageSrc  = 'http://192.168.1.103:1337/favicon.ico';
+            $scope.imageSrc  = 'http://localhost:1337/favicon.ico';
             break;
         }
         $scope.openModal(tempobj, 'slide-in-up');

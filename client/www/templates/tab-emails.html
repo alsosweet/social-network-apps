@@ -1,4 +1,4 @@
-<ion-view view-title="我的收信" class="view-tabs-top">
+<ion-view view-title="我的收信" class="view-tabs-top" cache-view="false">
 
   <div class="tabs tabs-top tabs-virtual">
     <a href class="tab-item disable-user-behavior"
@@ -37,7 +37,7 @@
     <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="" distance="30%"></ion-infinite-scroll>
   </ion-content>
   -->
-   <ion-content ng-init="loadEmails()" has-header="true" ng-show="active_content=='orders'">
+   <ion-content ng-init="" has-header="true" ng-show="active_content=='orders'">
      <ion-list>
        <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="email in emails" type="item-text-wrap" >
          <img class ="myavatar" ui-sref="event({eventId:email.id})" ng-src="{{email.src}}">

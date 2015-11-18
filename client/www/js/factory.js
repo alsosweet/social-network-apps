@@ -1,9 +1,9 @@
-var base = 'http://192.168.1.103:1337';
+var base = 'http://localhost:1337';
 
 angular.module('starter.factory', [])
   .factory('TwittSrv', function($q, $timeout, $http){
     'use strict';
-    var page = 1;
+    var page = parseInt(Math.random()*50, 10);
     var twitts=[];
 
     for(var i = 0; i<100; i++){
@@ -90,3 +90,169 @@ angular.module('starter.factory', [])
     };
     return LOADERAPI;
   }])
+
+  .factory('LSFactory', [function() {
+
+    if( window.localStorage && window.localStorage.getItem){
+      console.log('suport localStorage');
+    }
+
+    var LSAPI = {
+
+      clear: function() {
+        try{
+          return localStorage.clear();
+        }catch(e) {
+          console.info('Oops');
+        }
+      },
+
+      get: function(key) {
+        return JSON.parse(localStorage.getItem(key));
+      },
+
+      set: function(key, data) {
+        return localStorage.setItem(key, JSON.stringify(data));
+      },
+
+      delete: function(key) {
+        return localStorage.removeItem(key);
+      },
+
+      getAll: function() {
+        var books = [];
+        var items = Object.keys(localStorage);
+
+        for (var i = 0; i < items.length; i++) {
+          if (items[i] !== 'user' || items[i] != 'token') {
+            books.push(JSON.parse(localStorage[items[i]]));
+          }
+        }
+
+        return books;
+      }
+
+    };
+
+    return LSAPI;
+
+  }])
+
+
+  .factory('AuthFactory', ['LSFactory', function(LSFactory) {
+
+    var userKey = 'user';
+    var tokenKey = 'token';
+
+    var AuthAPI = {
+
+      isLoggedIn: function() {
+        return this.getUser() === null ? false : true;
+      },
+
+      getUser: function() {
+        return LSFactory.get(userKey);
+      },
+
+      setUser: function(user) {
+        return LSFactory.set(userKey, user);
+      },
+
+      getToken: function() {
+        return LSFactory.get(tokenKey);
+      },
+
+      setToken: function(token) {
+        return LSFactory.set(tokenKey, token);
+      },
+
+      deleteAuth: function() {
+        LSFactory.delete(userKey);
+        LSFactory.delete(tokenKey);
+      }
+
+    };
+
+    return AuthAPI;
+
+  }])
+
+  .factory('TokenInterceptor', ['$q', 'AuthFactory', function($q, AuthFactory) {
+
+    return {
+      request: function(config) {
+        config.headers = config.headers || {};
+        var token = AuthFactory.getToken();
+        var user = AuthFactory.getUser();
+
+        if (token && user) {
+          config.headers['X-Access-Token'] = token.token;
+          config.headers['X-Key'] = user.email;
+          config.headers['Content-Type'] = "application/json";
+        }
+        return config || $q.when(config);
+      },
+
+      response: function(response) {
+        return response || $q.when(response);
+      }
+    };
+
+  }])
+
+
+  .factory('BooksFactory', ['$http', function($http) {
+
+    var perPage = 30;
+
+    var API = {
+      get: function(page) {
+        return $http.get(base + '/api/v1/books/' + page + '/' + perPage);
+      }
+    };
+
+    return API;
+  }])
+
+  .factory('UserFactory', ['$http', 'AuthFactory',
+    function($http, AuthFactory) {
+
+      var UserAPI = {
+
+        login: function(user) {
+          return $http.post(base + '/login', user);
+        },
+
+        register: function(user) {
+          return $http.post(base + '/register', user);
+        },
+
+        logout: function() {
+          AuthFactory.deleteAuth();
+        },
+
+        getCartItems: function() {
+          var userId = AuthFactory.getUser()._id;
+          return $http.get(base + '/api/v1/users/' + userId + '/cart');
+        },
+
+        addToCart: function(book) {
+          var userId = AuthFactory.getUser()._id;
+          return $http.post(base + '/api/v1/users/' + userId + '/cart', book);
+        },
+
+        getPurchases: function() {
+          var userId = AuthFactory.getUser()._id;
+          return $http.get(base + '/api/v1/users/' + userId + '/purchases');
+        },
+
+        addPurchase: function(cart) {
+          var userId = AuthFactory.getUser()._id;
+          return $http.post(base + '/api/v1/users/' + userId + '/purchases', cart);
+        }
+
+      };
+
+      return UserAPI;
+    }
+  ])

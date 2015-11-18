@@ -1,0 +1,89 @@
+<ion-modal-view>
+  <div class="tabs-striped tabs-background-assertive tabs-color-light">
+
+   <div class="tabs tabs-secondary tabs-icon-left">
+      <a class="tab-item" ng-class="{active : viewLogin}" href="javascript:" ng-click="switchTab('login')">
+        <i class="icon ion-locked"></i>&nbsp;&nbsp;&nbsp;登录
+      </a>
+      <a class="tab-item" ng-class="{active : !viewLogin}" href="javascript:" ng-click="switchTab('register')">
+        <i class="icon ion-person-add"></i>&nbsp;&nbsp;&nbsp;注册
+      </a>
+    </div>
+
+  </div>
+  <!-- login pane -->
+  <ion-pane ng-show="viewLogin">
+    <ion-header-bar>
+      <h1 class="title">登录</h1>
+      <div class="buttons">
+        <button class="button button-assertive" ng-click="hide()">关闭</button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <form name = "loginFrom" novalidate>
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">邮箱</span>
+            <input type="email" name="useremail" placeholder="您的邮箱地址" ng-model="user.email" >
+          </label>
+          <label class="item item-input">
+            <span class="input-label">密码</span>
+            <input type="password" placeholder="您的密码" ng-model="user.password">
+          </label>
+          <label class="item">
+            <button class="button button-block button-assertive" ng-click="login()" ng-disabled="!user.email || !user.password" type="submit">登录</button>
+          </label>
+        </div>
+      </form>
+      <p ng-show="loginFrom.useremail.$invalid" class="text-center assertive">请输入正确的邮箱格式</p>
+      <p class="text-center">或者</p>
+      <div class="row">
+        <div class="col">
+          <button class="button button-block button-outline button-assertive" ng-click="sayhi()">QQ一键登录</button>
+        </div>
+        <div class="col">
+          <button class="button button-block button-outline button-assertive" ui-sref="#">微信登录</button>
+        </div>
+      </div>
+    </ion-content>
+  </ion-pane>
+  <!-- register pane -->
+  <ion-pane ng-hide="viewLogin">
+    <ion-header-bar>
+      <h1 class="title">注册</h1>
+      <div class="buttons">
+        <button class="button button-assertive" ng-click="hide()">关闭</button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <form name = "signupFrom" novalidate>
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">昵称</span>
+            <input type="text" name="username" ng-maxlength="20" ng-model="user.name">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">邮箱地址</span>
+            <input type="email" name="useremail" ng-maxlength="30" ng-model="user.email">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">密码</span>
+            <input type="password" name="password" ng-model="user.password" ng-minlength="6" compare-to="user.password2">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">确认密码</span>
+            <input type="password" name="confirmPassword" ng-model="user.password2">
+          </label>
+          <label class="item">
+            <button class="button button-block button-assertive" ng-click="register()" ng-disabled="!user.name || !user.email || !user.password || signupFrom.password.$error.compareTo" type="submit">注册</button>
+          </label>
+        </div>
+      </form>
+      <p ng-show="signupFrom.username.$error.maxlength"  class="text-center assertive">昵称长度少于20字</p>
+      <p ng-show="signupFrom.useremail.$error.maxlength"  class="text-center assertive">邮箱长度少于30字</p>
+      <p ng-show="signupFrom.password.$error.minlength"  class="text-center assertive">密码长度至少6位</p>
+      <p ng-show="signupFrom.password.$error.compareTo"  class="text-center assertive">请输入确认密码，保存密码一致</p>
+      <p ng-show="signupFrom.useremail.$invalid" class="text-center assertive">请输入正确的邮箱格式</p>
+    </ion-content>
+  </ion-pane>
+</ion-modal-view>

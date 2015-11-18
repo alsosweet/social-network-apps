@@ -10,12 +10,6 @@
         "autoIncrement": true,
         "primaryKey": true,
         "unique": true
-      },
-      "createdAt": {
-        "type": "datetime"
-      },
-      "updatedAt": {
-        "type": "datetime"
       }
     },
     "setting": {
@@ -24,12 +18,6 @@
         "autoIncrement": true,
         "primaryKey": true,
         "unique": true
-      },
-      "createdAt": {
-        "type": "datetime"
-      },
-      "updatedAt": {
-        "type": "datetime"
       }
     }
   },

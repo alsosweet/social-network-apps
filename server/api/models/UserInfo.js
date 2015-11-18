@@ -38,6 +38,7 @@ module.exports = {
     /*email Ψһ�����ڵ�½��size̫С�˰ɣ���*/
     email: {
       type: 'string',
+      unique: true,
       size:20,
     },
     sex: {
