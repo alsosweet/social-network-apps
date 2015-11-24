@@ -1,92 +1,19 @@
 angular.module('starter.controllers', ['compareTo'])
-  .controller('TabCtrl', ['$rootScope', '$ionicModal', 'AuthFactory', '$location', 'UserFactory', '$scope', 'Loader',
-    function($rootScope, $ionicModal, AuthFactory, $location, UserFactory, $scope, Loader) {
+.controller('TabCtrl', function($rootScope, $ionicModal, AuthFactory, $location, UserFactory, $scope, Loader) {
 
-      $rootScope.$on('showLoginModal', function($event, scope, cancelCallback, callback) {
-
-        $scope = scope || $scope;
-
-        $scope.user = {
-          email: '',
-          password: '',
-          password2: '',
-        };
-        $scope.viewLogin = true;
-
-        $ionicModal.fromTemplateUrl('templates/login.html', {
-          scope: $scope
-        }).then(function(modal) {
-          $scope.modal = modal;
-          $scope.modal.show();
-
-          $scope.switchTab = function(tab) {
-            if (tab === 'login') {
-              $scope.viewLogin = true;
-            } else {
-              $scope.viewLogin = false;
-            }
-          }
-
-          $scope.hide = function() {
-            $scope.modal.hide();
-            if (typeof cancelCallback === 'function') {
-              cancelCallback();
-            }
-          }
-
-          $scope.login = function() {
-            Loader.showLoading('验证中...');
-
-            UserFactory.login($scope.user).success(function(data) {
-
-              data = data.MyInfo;
-              AuthFactory.setUser(data.user);
-              AuthFactory.setToken({
-                token: data.token,
-                expires: data.expires
-              });
-
-              $rootScope.isAuthenticated = true;
-              $scope.modal.hide();
-              Loader.hideLoading();
-              if (typeof callback === 'function') {
-                callback();
-              }
-            }).error(function(err, statusCode) {
-              Loader.hideLoading();
-              Loader.toggleLoadingWithMessage(err);
-            });
-          }
-
-          $scope.register = function() {
-            Loader.showLoading('等待...');
-
-            UserFactory.register($scope.user).success(function(data) {
-
-              data = data.MyInfo;
-              AuthFactory.setUser(data.user);
-              AuthFactory.setToken({
-                token: data.token,
-                expires: data.expires
-              });
-
-              $rootScope.isAuthenticated = true;
-              Loader.hideLoading();
-              $scope.modal.hide();
-              if (typeof callback === 'function') {
-                callback();
-              }
-            }).error(function(err, statusCode) {
-              Loader.hideLoading();
-              Loader.toggleLoadingWithMessage(err);
-            });
-          }
-        });
-      });
-
-      $rootScope.loginFromMenu = function() {
-        $rootScope.$broadcast('showLoginModal', $scope, null, null);
+    $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
+        $scope.loginModal = modal;
+      },
+      {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
       }
+    );
+    //Be sure to cleanup the modal by removing it from the DOM
+    $scope.$on('$destroy', function() {
+      $scope.loginModal.remove();
+    });
 
       $rootScope.logout = function() {
         UserFactory.logout();
@@ -94,11 +21,88 @@ angular.module('starter.controllers', ['compareTo'])
         $location.path('/tab/dash');
         Loader.toggleLoadingWithMessage('注销成功!', 2000);
       }
+  }
+)
+.controller('LoginCtrl', function($scope, $http, $state, AuthenticationService, Loader) {
 
+    $scope.user = {
+      email: '',
+      password: '',
+      password2: '',
+    };
+    $scope.viewLogin = true;
 
+    $scope.switchTab = function(tab) {
+      if (tab === 'login') {
+        $scope.viewLogin = true;
+      } else {
+        $scope.viewLogin = false;
+      }
     }
-  ])
+
+    $scope.hide = function() {
+      AuthenticationService.loginCancelled();
+    }
+
+    $scope.login = function() {
+      Loader.showLoading('验证中...');
+      AuthenticationService.login($scope.user);
+    };
+
+    $scope.register = function() {
+      Loader.showLoading('等待...');
+      AuthenticationService.register($scope.user);
+    }
+
+
+    $scope.$on('event:auth-loginRequired', function(e, rejection) {
+      console.log('handling login required');
+      $scope.loginModal.show();
+    });
+
+    $scope.$on('event:auth-loginConfirmed', function() {
+      $scope.username = null;
+      $scope.password = null;
+      $scope.loginModal.hide();
+    });
+
+    $scope.$on('event:auth-login-failed', function(e, status) {
+      var error = "Login failed.";
+      if (status == 401) {
+        error = "Invalid Username or Password.";
+      }
+      Loader.hideLoading();
+      Loader.toggleLoadingWithMessage(error);
+    });
+    $scope.$on('event:auth-register-failed', function(e, status) {
+      var error = "register failed.";
+      if (status == 401) {
+        error = "Invalid Username or Password.";
+      }
+      Loader.hideLoading();
+      Loader.toggleLoadingWithMessage(error);
+    });
+
+    $scope.$on('event:auth-logout-complete', function() {
+      console.log("logout complete");
+      $state.go('tab.dash', {}, {reload: true, inherit: false});
+    });
+
+    $scope.$on('event:auth-loginCancelled', function() {
+      console.log("login cancelled");
+      $scope.loginModal.hide();
+      $state.go('tab.dash', {}, {reload: true, inherit: false});
+    });
+
+  })
+.controller('LogoutCtrl', function($scope, AuthenticationService) {
+  $scope.$on('$ionicView.enter', function() {
+    AuthenticationService.logout();
+  });
+})
 .controller('DashCtrl', function($scope, $ionicNavBarDelegate,TwittSrv) {
+    $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
+
     $scope.city = '深圳';
     //$ionicNavBarDelegate.align('center');
     TwittSrv.getTwitts().then(function(twitts){
@@ -125,75 +129,18 @@ angular.module('starter.controllers', ['compareTo'])
 
   })
 
-.controller('EmailsCtrl', ['$scope', 'AuthFactory', '$rootScope', '$location', '$timeout', 'UserFactory', 'Loader','Chats',
-      function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
+.controller('EmailsCtrl', function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
 
-        $scope.active_content = 'orders';
+    $scope.active_content = 'orders';
 
-        $scope.$on('getEmails', function() {
-          Loader.showLoading('Fetching Your Cart..');
-          //loadEmails();
-          Loader.hideLoading();
-          /*
 
-          UserFactory.getCartItems().success(function(data) {
-            $scope.books = data.data;
-            Loader.hideLoading();
-          }).error(function(err, statusCode) {
-            Loader.hideLoading();
-            Loader.toggleLoadingWithMessage(err.message);
-          });*/
-        });
-
-        if (!AuthFactory.isLoggedIn()) {
-          $rootScope.$broadcast('showLoginModal', $scope, function() {
-            // cancel auth callback
-            $timeout(function() {
-              $location.path('/tab/dash');
-            }, 200);
-          }, function() {
-            // user is now logged in
-            $scope.$broadcast('getEmails');
-          });
-          return;
-        }
-
-        $scope.$broadcast('getEmails');
-
-    $scope.setActiveContent = function(active_content){
-      $scope.active_content = active_content;
-    }
-    $scope.sendback = function(index){
-      alert(index);
-    }
-    $scope.emails = [];
-//从services里面取数据  Preload images in Ionic using $ImageCacheFactory
-    var loadEmails = function() {
-      for(var i = 0; i < 30; i++) {
-        $scope.emails.push({
-          name: 'name:'+i,
-          src: "http://localhost:1337/favicon.ico",
-          age:i,
-          id:i,
-          lastText:i+'messages example'
-        });
-      }
-    }
-
-    $scope.sendemails = [];
-//从services里面取数据  Preload images in Ionic using $ImageCacheFactory
-    $scope.loadSendEmails = function() {
-      for(var i = 0; i < 30; i++) {
-        $scope.sendemails.push({
-          name: 'name:'+i,
-          src: "http://localhost:1337/favicon.ico",
-          age:i,
-          id:i,
-          lastText:i+'messages example'
-        });
-      }
-    }
-}])
+    UserFactory.getPurchases().success(function (data, status, headers, config) {
+      $scope.customers = data;
+    })
+      .error(function (data, status, headers, config) {
+        console.log("Error occurred.  Status:" + status);
+      });
+})
   .controller('EmailDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
   })
@@ -216,7 +163,7 @@ angular.module('starter.controllers', ['compareTo'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
-  .controller('ProfileCtrl', function($scope) {
+.controller('ProfileCtrl', function($scope) {
     $scope.settings = {
       enableFriends: true
     };
@@ -226,8 +173,7 @@ angular.module('starter.controllers', ['compareTo'])
     enableFriends: true
   };
 })
-  .controller('FriendProfileCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams',
-    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+.controller('FriendProfileCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
 
       // A confirm dialog
       $scope.showConfirm = function() {
@@ -244,7 +190,7 @@ angular.module('starter.controllers', ['compareTo'])
       };
 
       $scope.applyMeet = function(){
-        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请');
+        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请!');
       }
 
       $scope.relationship = false;
@@ -320,8 +266,8 @@ angular.module('starter.controllers', ['compareTo'])
       }
 
     }
-  ]).controller('EmailSendingCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams',
-    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+  )
+.controller('EmailSendingCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
 
       var sendId = $stateParams.sendId;
 
@@ -335,8 +281,8 @@ angular.module('starter.controllers', ['compareTo'])
       }
 
     }
-  ]).controller('PersonalInfoCtrl', ['$scope', '$ionicModal','Loader','$ionicPopup', '$state', '$stateParams','$timeout',
-    function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {
+)
+.controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {
 
       console.log('个人资料');
 // Triggered on a button click, or some other target
@@ -389,4 +335,4 @@ angular.module('starter.controllers', ['compareTo'])
         }, 300000);
       };
     }
-  ]);
+);

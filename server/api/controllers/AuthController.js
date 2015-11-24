@@ -69,6 +69,12 @@ module.exports = {
         });
     },
 
+    test: function(req, res){
+        if(req.headers.authorization)
+        return res.ok();
+        return res.unAuthorized('邮箱地址或密码为空，请重新输入！');
+    },
+
     validate: function(id, callback) {
 
         UserInfo.findOne({userid:id}).exec(function(e, r){

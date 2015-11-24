@@ -5,8 +5,12 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','starter.factory'])
-
+angular.module('starter', [
+  'ionic',
+  'LocalStorageModule',
+  'starter.controllers',
+  'starter.services',
+  'starter.factory'])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -56,6 +60,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
 
   .state('tab.emails', {
       url: '/emails',
+      cache: false, //另一种方法就是在html文件加入cache-view="false"
       views: {
         'tab-emails': {
           templateUrl: 'templates/tab-emails.html',
@@ -65,6 +70,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     })
     .state('tab.email-detail', {
       url: '/emails/:chatId',
+      cache: false,
       views: {
         'tab-emails': {
           templateUrl: 'templates/email-detail.html',
@@ -74,6 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     })
     .state('tab.chats', {
       url: '/chats',
+      cache: false,
       views: {
         'tab-chats': {
           templateUrl: 'templates/tab-chats.html',
@@ -83,6 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     })
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
+      cache: false,
       views: {
         'tab-chats': {
           templateUrl: 'templates/chat-detail.html',
@@ -92,6 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     })
     .state('tab.profile', {
       url: '/profile',
+      cache: false,
       views: {
         'tab-profile': {
           templateUrl: 'templates/tab-profile.html',
@@ -101,6 +110,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     })
   .state('tab.account', {
     url: '/account',
+    cache: false,
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
@@ -110,16 +120,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
   })
     .state('personalInfo', {
       url: '/personalinfo',
+      cache: false,
       templateUrl: 'templates/personal-info.html',
       controller: 'PersonalInfoCtrl'
     })
     .state('event', {
       url: '/event/:eventId',
+      cache: false,
       templateUrl: 'templates/friend-profile.html',
       controller: 'FriendProfileCtrl'
     })
+    .state('tab.logout', {
+      url: "/logout",
+      views: {
+        'tab-logout' :{
+          controller: "LogoutCtrl",
+          templateUrl: 'templates/tab-dash.html'
+        }
+      }
+    })
     .state('emailSending', {
       url: '/emailSending/:sendId',
+      cache: false,
       templateUrl: 'templates/email-sending.html',
       controller: 'EmailSendingCtrl'
     });

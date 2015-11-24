@@ -242,8 +242,7 @@ angular.module('starter.factory', [])
         },
 
         getPurchases: function() {
-          var userId = AuthFactory.getUser()._id;
-          return $http.get(base + '/api/v1/users/' + userId + '/purchases');
+          return $http.get(base + '/testurl');
         },
 
         addPurchase: function(cart) {

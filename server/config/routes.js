@@ -39,6 +39,7 @@ module.exports.routes = {
   'get /browse/:page?':'BrowseController.viewUserPage',
   'post /login':'AuthController.login',
   'post /register':'AuthController.register',
+  'get /testurl':'AuthController.test'
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
