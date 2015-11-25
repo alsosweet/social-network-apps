@@ -8,8 +8,25 @@
 module.exports = {
 
     viewUserInfo: function(req, res){
-        UserInfo.find({userid:req.param('id')}).exec(function(e, r){
+        UserInfo.find({userid:req.param('id')}).populate('city').populate('gifts').exec(function(e, r){
             if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
+            if (r.length == 0) return res.notFound();
+            for(var i = 0; i < r.length; i++){
+                var id = r[i].userid%1000;
+                if(id.toString().length == 1){
+                    id = '00'+id;
+                }else if(id.toString().length == 2){
+                    id = '0'+id;
+                }
+                if(r[i].sex == '女'){
+                    r[i].avatar = 'http://picc.eckuku.com/user_data7/'+r[i].vir_age+'/'+id+'_avatar_big.jpg';
+                }else{
+                    if(r[i].vir_age >33) r[i].vir_age = 30;
+                    r[i].avatar = 'http://picc.eckuku.com/user_data6/'+r[i].vir_age+'/'+id+'_avatar_big.jpg';
+                }
+                r[i].age = r[i].vir_age;
+            }
+
             return res.json({UserInfo: r});
         });
     },

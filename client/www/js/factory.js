@@ -29,7 +29,7 @@ angular.module('starter.factory', [])
 
     function getNewTwitts(){
       if(page <= 5){
-        page = parseInt(Math.random()*50, 10);
+        page = parseInt(Math.random()*500, 10);
       }else{
         page--;
       }
@@ -214,21 +214,13 @@ angular.module('starter.factory', [])
     return API;
   }])
 
-  .factory('UserFactory', ['$http', 'AuthFactory',
-    function($http, AuthFactory) {
+  .factory('UserFactory', ['$http',
+    function($http) {
 
       var UserAPI = {
 
-        login: function(user) {
-          return $http.post(base + '/login', user);
-        },
-
-        register: function(user) {
-          return $http.post(base + '/register', user);
-        },
-
-        logout: function() {
-          AuthFactory.deleteAuth();
+        getUserInfo: function(userid) {
+          return $http.get(base + '/browse/userinfo/' + userid);
         },
 
         getCartItems: function() {

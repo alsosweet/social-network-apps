@@ -22,11 +22,11 @@
   <ion-content class="padding has-footer">
     <div class="list card">
 
-      <a class="item item-thumbnail-left" ng-click="">
-        <img src="http://lorempixel.com/60/60" >
-        <h2>Pretty Hate Machine</h2>
-        <p>广东-深圳</p>
-        <p>19岁</p>
+      <a class="item item-thumbnail-left" ng-click="showImage(3)">
+        <img ng-src="{{userinfo.avatar}}" >
+        <h3>昵称：{{userinfo.username}}</h3>
+        <p>城市：{{userinfo.city.region_name}}</p>
+        <p>{{userinfo.vir_age}}岁</p>
       </a>
 
 
@@ -52,14 +52,9 @@
 
       <div class="title-info "><span>最近收到的礼物</span></div>
       <ion-scroll direction="x" class="wide-as-needed">
-        <a href="#"><img class = "myavatar" src="img/gift/1.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/2.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/3.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/4.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/5.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/6.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/7.gif"></a>
-        <a href="#"><img class = "myavatar" src="img/gift/8.gif"></a>
+        <a ng-repeat="gift in userinfo.gifts" href="#">
+          <img class = "myavatar" ng-src="img/gift/{{gift.message}}.gif">
+        </a>
       </ion-scroll>
     </div>
 
@@ -68,19 +63,19 @@
     <div class="list">
       <a class="item">
         婚姻
-        <span class="item-note positive">单身</span>
+        <span class="item-note positive">{{userinfo.marry}}</span>
       </a>
       <a class="item">
         身高
-        <span class="item-note positive">158cm</span>
+        <span class="item-note positive">{{userinfo.height}}cm</span>
       </a>
       <a class="item">
         职业
-        <span class="item-note positive">个体户</span>
+        <span class="item-note positive">{{userinfo.career}}</span>
       </a>
       <a class="item">
         学历
-        <span class="item-note positive">高中</span>
+        <span class="item-note positive">{{userinfo.collage}}</span>
       </a>
     </div>
     <div class="title-info "><span>个人空间</span></div>
@@ -88,31 +83,30 @@
     <div class="list">
       <a class="item">
         交友目的
-        <span class="item-note positive">都可以啦</span>
+        <span class="item-note positive">{{userinfo.purpose}}</span>
       </a>
       <a class="item">
-        外貌评价
-        <span class="item-note positive">秀外慧中</span>
+        居住情况
+        <span class="item-note positive">{{userinfo.live}}</span>
       </a>
       <a class="item">
         恋爱观念
-        <span class="item-note positive">顺其自然</span>
+        <span class="item-note positive">{{userinfo.lovepoint}}</span>
       </a>
       <a class="item">
         首次见面希望
-        <span class="item-note positive">如果喜欢，可以家里爱爱</span>
+        <span class="item-note positive">{{userinfo.wish}}</span>
       </a>
       <a class="item">
-        喜欢爱爱地点
-        <span class="item-note positive">在我家</span>
+        喜欢约会/爱爱地点
+        <span class="item-note positive">{{userinfo.meetads}}</span>
       </a>
 
     </div>
     <div class="title-info "><span>内心独白</span></div>
     <div class="card inner-monologue">
-      <div class="item item-text-wrap">
-        This is a basic Card which contains an item that has wrapping text.
-        This is a basic Card which contains an item that has wrapping text.
+      <div class="item item-text-wrap positive">
+        {{userinfo.talk}}
       </div>
     </div>
 
@@ -147,7 +141,7 @@
         <button class="button button-clear icon-left ion-ios-email-outline" ui-sref="emailSending({sendId:12})">写私信</button>
       </div>
       <div class="col">
-        <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="showImage(3)">送礼物</button>
+        <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="showImage(2)">送礼物</button>
       </div>
     </div>
   </div>

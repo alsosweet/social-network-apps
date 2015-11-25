@@ -23,7 +23,7 @@ angular.module('starter.controllers', ['compareTo'])
       }
   }
 )
-.controller('LoginCtrl', function($scope, $http, $state, AuthenticationService, Loader) {
+.controller('LoginCtrl', function($scope, $http, $state, $rootScope, AuthenticationService, Loader) {
 
     $scope.user = {
       email: '',
@@ -61,9 +61,8 @@ angular.module('starter.controllers', ['compareTo'])
     });
 
     $scope.$on('event:auth-loginConfirmed', function() {
-      $scope.username = null;
-      $scope.password = null;
       $scope.loginModal.hide();
+      $rootScope.$broadcast('login.success',null);
     });
 
     $scope.$on('event:auth-login-failed', function(e, status) {
@@ -91,7 +90,7 @@ angular.module('starter.controllers', ['compareTo'])
     $scope.$on('event:auth-loginCancelled', function() {
       console.log("login cancelled");
       $scope.loginModal.hide();
-      $state.go('tab.dash', {}, {reload: true, inherit: false});
+      $state.go($state.current, {}, {reload: true, inherit: false});
     });
 
   })
@@ -100,10 +99,19 @@ angular.module('starter.controllers', ['compareTo'])
     AuthenticationService.logout();
   });
 })
-.controller('DashCtrl', function($scope, $ionicNavBarDelegate,TwittSrv) {
+.controller('DashCtrl', function($scope, $ionicNavBarDelegate,$state, TwittSrv, localStorageService) {
+
+    var authToken = localStorageService.get('authorizationToken');
+    if(!authToken){
+      $state.go('firstShow', {}, {reload: true, inherit: false});
+      return;
+    }
     $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
 
-    $scope.city = '深圳';
+    $scope.myInfo = localStorageService.get('MyInfo').user;
+
+    $scope.city = $scope.myInfo.city.region_name||$scope.city;
+
     //$ionicNavBarDelegate.align('center');
     TwittSrv.getTwitts().then(function(twitts){
       $scope.twitts = twitts.data.UserInfo;
@@ -126,9 +134,30 @@ angular.module('starter.controllers', ['compareTo'])
         $scope.$broadcast('scroll.infiniteScrollComplete');
       });
     };
-
   })
+  .controller('FirstShowCtrl', function($scope, $ionicNavBarDelegate,$rootScope, $state, $ionicHistory, TwittSrv) {
+    //$ionicNavBarDelegate.align('center');
+    TwittSrv.getTwitts().then(function(twitts){
+      $scope.twitts = twitts.data.UserInfo;
+    });
+    $scope.loadMore = function(){
+      TwittSrv.getMoreTwitts().then(function(olderTwitts){
+        $scope.twitts = $scope.twitts.concat(olderTwitts.data.UserInfo);
+      }).finally(function() {
+        // Stop the ion-infinite-scroll from spinning
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+      });
+    };
+    $scope.login = function(){
+      $rootScope.$broadcast('event:auth-loginRequired',null);//rejection用来干嘛
+    }
 
+    $rootScope.$on('login.success',function(){
+      $ionicHistory.clearCache().then(function(){
+        $state.go('tab.dash', {}, {reload: true, inherit: false});
+      });
+    });
+  })
 .controller('EmailsCtrl', function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
 
     $scope.active_content = 'orders';
@@ -173,7 +202,19 @@ angular.module('starter.controllers', ['compareTo'])
     enableFriends: true
   };
 })
-.controller('FriendProfileCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+.controller('FriendProfileCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $ionicHistory, UserFactory) {
+
+    Loader.showLoading("加载中...");
+    UserFactory.getUserInfo($stateParams.eventId).success(function (data, status, headers, config) {
+      Loader.hideLoading();
+      $scope.userinfo = data.UserInfo[0];
+      //$scope.$broadcast('getUserInfo');
+    }).error(function (data, status, headers, config) {
+        console.log("Error occurred.  Status:" + status);
+        Loader.hideLoading();
+        Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+        $ionicHistory.goBack();
+      });
 
       // A confirm dialog
       $scope.showConfirm = function() {
@@ -202,6 +243,26 @@ angular.module('starter.controllers', ['compareTo'])
             $scope.modal = modal;
             $scope.modal.show();
           });
+
+        //Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+          console.log('Modal is $destroy!');
+          $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hide', function() {
+          // Execute action
+          console.log('Modal is hide!');
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function() {
+          // Execute action
+          console.log('Modal is removed!');
+        });
+        $scope.$on('modal.shown', function() {
+          console.log('Modal is shown!');
+        });
+
       };
 
       $scope.closeModal = function() {
@@ -209,27 +270,8 @@ angular.module('starter.controllers', ['compareTo'])
         $scope.modal.hide();
       };
 
-      //Cleanup the modal when we're done with it!
-      $scope.$on('$destroy', function() {
-        console.log('Modal is $destroy!');
-        $scope.modal.remove();
-      });
-      // Execute action on hide modal
-      $scope.$on('modal.hide', function() {
-        // Execute action
-        console.log('Modal is hide!');
-      });
-      // Execute action on remove modal
-      $scope.$on('modal.removed', function() {
-        // Execute action
-        console.log('Modal is removed!');
-      });
-      $scope.$on('modal.shown', function() {
-        console.log('Modal is shown!');
-      });
-
       var tempobj={};
-      tempobj.url = 'templates/gift-modal.html';
+      tempobj.url = 'templates/image-modal.html';
 
       //需要用promise或其他方法，否则加载完成前显示默认图片
       $scope.imageSrc = 'http://ionicframework.com/img/ionic-logo-blog.png';
@@ -243,7 +285,7 @@ angular.module('starter.controllers', ['compareTo'])
             $scope.imageSrc  = 'http://ionicframework.com/img/ionic_logo.svg';
             break;
           case 3:
-            $scope.imageSrc  = 'http://localhost:1337/favicon.ico';
+            $scope.imageSrc  = $scope.userinfo.avatar;
             break;
         }
         $scope.openModal(tempobj, 'slide-in-up');

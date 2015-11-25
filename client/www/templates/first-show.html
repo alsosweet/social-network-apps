@@ -1,0 +1,52 @@
+<ion-view view-title="同城交友" hide-back-button="true">
+  <ion-nav-buttons side="right">
+    <button class="button button-outline button-dark" ng-click="login()">
+      登陆/注册
+    </button>
+  </ion-nav-buttons>
+  <ion-content>
+      <div class="row" ng-repeat="twitt in twitts" ng-if="$index % 3 === 0">
+        <div class="col col-33" ng-if="$index < twitts.length">
+          <div class="item item-image">
+            <img ng-src="{{::twitts[$index].avatar}}" width="100%">
+          </div>
+        <span class="assertive">
+          {{twitts[$index].height}}cm
+        </span>
+        <span class="assertive">
+          {{twitts[$index].age}}岁
+        </span>
+        </div>
+
+        <div class="col col-33" ng-if="$index + 1 < twitts.length">
+
+          <div class="item item-image">
+            <img ng-src="{{twitts[$index+1].avatar}}" width="100%">
+          </div>
+        <span class="assertive">
+          {{twitts[$index+1].height}}cm
+        </span>
+        <span class="assertive">
+          {{twitts[$index+1].age}}岁
+        </span>
+
+        </div>
+
+        <div class="col col-33" ng-if="$index + 2 < twitts.length">
+
+          <div class="item item-image">
+            <img ng-src="{{twitts[$index+2].avatar}}" width="100%">
+          </div>
+        <span class="assertive">
+          {{twitts[$index+2].height}}cm
+        </span>
+        <span class="assertive">
+          {{twitts[$index+2].age}}岁
+        </span>
+
+        </div>
+
+      </div>
+    <ion-infinite-scroll on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+  </ion-content>
+</ion-view>

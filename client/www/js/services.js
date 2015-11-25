@@ -63,7 +63,7 @@ angular.module('starter.services', ['http-auth-interceptor'])
             $http.defaults.headers.common.Authorization = data.authorizationToken;  // Step 1
             // A more secure approach would be to store the token in SharedPreferences for Android, and Keychain for iOS
             localStorageService.set('authorizationToken', data.authorizationToken);
-
+            localStorageService.set('MyInfo', data);
             // Need to inform the http-auth-interceptor that
             // the user has logged in successfully.  To do this, we pass in a function that
             // will configure the request headers with the authorization token so
@@ -84,13 +84,14 @@ angular.module('starter.services', ['http-auth-interceptor'])
           .success(function (data, status, headers, config) {
 
             data = data.MyInfo;
+            data.authorizationToken = data.token;
             $rootScope.isAuthenticated = true;
             Loader.hideLoading();
 
             $http.defaults.headers.common.Authorization = data.authorizationToken;  // Step 1
             // A more secure approach would be to store the token in SharedPreferences for Android, and Keychain for iOS
             localStorageService.set('authorizationToken', data.authorizationToken);
-
+            localStorageService.set('MyInfo', data);
             // Need to inform the http-auth-interceptor that
             // the user has logged in successfully.  To do this, we pass in a function that
             // will configure the request headers with the authorization token so
@@ -110,6 +111,7 @@ angular.module('starter.services', ['http-auth-interceptor'])
         $http.post('https://logout', {}, { ignoreAuthModule: true })
           .finally(function(data) {
             localStorageService.remove('authorizationToken');
+            localStorageService.remove('MyInfo');
             delete $http.defaults.headers.common.Authorization;
             $rootScope.$broadcast('event:auth-logout-complete');
           });

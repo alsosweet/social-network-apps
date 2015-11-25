@@ -11,7 +11,7 @@ angular.module('starter', [
   'starter.controllers',
   'starter.services',
   'starter.factory'])
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $http, localStorageService, authService, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -24,6 +24,23 @@ angular.module('starter', [
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
+    var authToken = localStorageService.get('authorizationToken');
+    if(authToken){
+      $rootScope.isAuthenticated = true;
+      $http.defaults.headers.common.Authorization = authToken;  // Step 1
+      // Need to inform the http-auth-interceptor that
+      // the user has logged in successfully.  To do this, we pass in a function that
+      // will configure the request headers with the authorization token so
+      // previously failed requests(aka with status == 401) will be resent with the
+      // authorization token placed in the header
+      authService.loginConfirmed(authToken, function(config) {  // Step 2 & 3
+        config.headers.Authorization = authToken;
+        return config;
+      });
+    }else{
+      $rootScope.isAuthenticated = false;
+    }
+
   });
 })
   .config(function($ionicConfigProvider) {
@@ -126,9 +143,13 @@ angular.module('starter', [
     })
     .state('event', {
       url: '/event/:eventId',
-      cache: false,
       templateUrl: 'templates/friend-profile.html',
       controller: 'FriendProfileCtrl'
+    })
+    .state('firstShow', {
+      url: '/firstShow',
+      templateUrl: 'templates/first-show.html',
+      controller: 'FirstShowCtrl'
     })
     .state('tab.logout', {
       url: "/logout",

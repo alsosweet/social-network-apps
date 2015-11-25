@@ -1,10 +1,10 @@
 {
   "data": {
-    "admin": [],
-    "setting": []
+    "setting": [],
+    "admin": []
   },
   "schema": {
-    "admin": {
+    "setting": {
       "id": {
         "type": "integer",
         "autoIncrement": true,
@@ -12,7 +12,7 @@
         "unique": true
       }
     },
-    "setting": {
+    "admin": {
       "id": {
         "type": "integer",
         "autoIncrement": true,
