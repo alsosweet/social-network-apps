@@ -56,7 +56,7 @@ module.exports = {
             return res.unAuthorized('邮箱地址或密码为空，请重新输入！');
         }
 
-        UserInfo.findOne({email:email}).exec(function(e, r){
+        UserInfo.findOne({email:email}).populate('city').exec(function(e, r){
             if (e) return res.negotiate(e);
             if (!r) return res.notFound("邮箱地址或密码错误！");
             var saltPassword = md5(password);
@@ -67,6 +67,12 @@ module.exports = {
                 return res.forbidden("邮箱地址或密码错误！");
             }
         });
+    },
+
+    test: function(req, res){
+        if(req.headers.authorization)
+        return res.ok();
+        return res.unAuthorized('邮箱地址或密码为空，请重新输入！');
     },
 
     validate: function(id, callback) {

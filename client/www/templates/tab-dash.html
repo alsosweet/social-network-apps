@@ -16,27 +16,27 @@
         <div class="col col-33" ng-if="$index < twitts.length">
 
           <div class="item item-image">
-            <img ng-src="{{::twitts[$index].avatar}}" width="100%" ui-sref="event({eventId:twitts[$index].id})">
+            <img ng-src="{{::twitts[$index].avatar}}" width="100%" ui-sref="event({eventId:twitts[$index].userid})">
           </div>
         <span class="assertive">
           {{twitts[$index].dist}}米
         </span>
         <span class="assertive">
-          {{twitts[$index].age}}
+          {{twitts[$index].age}}岁
         </span>
         </div>
 
         <div class="col col-33" ng-if="$index + 1 < twitts.length">
 
           <div class="item item-image">
-            <img ng-src="{{twitts[$index+1].avatar}}" width="100%">
+            <img ng-src="{{twitts[$index+1].avatar}}" width="100%" ui-sref="event({eventId:twitts[$index+1].userid})">
           </div>
 
         <span class="assertive">
           {{twitts[$index+1].dist}}米
         </span>
         <span class="assertive">
-          {{twitts[$index+1].age}}
+          {{twitts[$index+1].age}}岁
         </span>
 
         </div>
@@ -44,14 +44,14 @@
         <div class="col col-33" ng-if="$index + 2 < twitts.length">
 
           <div class="item item-image">
-            <img ng-src="{{twitts[$index+2].avatar}}" width="100%">
+            <img ng-src="{{twitts[$index+2].avatar}}" width="100%" ui-sref="event({eventId:twitts[$index+2].userid})">
           </div>
 
         <span class="assertive">
           {{twitts[$index+2].dist}}米
         </span>
         <span class="assertive">
-          {{twitts[$index+2].age}}
+          {{twitts[$index+2].age}}岁
         </span>
 
         </div>

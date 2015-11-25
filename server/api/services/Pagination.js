@@ -7,7 +7,7 @@
 module.exports = {
 
     page:function(req, res){
-        perpage = req.param('perpage') || 5;
+        perpage = req.param('perpage') || 10;
         var page = Math.max(
                 parseInt(req.param('page') || '1', 10),
                 1

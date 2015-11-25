@@ -9,11 +9,12 @@ module.exports = {
   connection: 'jiayuanMysqlServer',
   tableName: 'qing_region',
   attributes: {
-    region_id: {
+    id: {
       type: 'integer',
       size:5,
       unique: true,
       primaryKey: true,
+      columnName: 'region_id'
     },
     parent_id: {
       type: 'integer',
