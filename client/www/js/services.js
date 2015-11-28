@@ -50,33 +50,58 @@ angular.module('starter.services', ['http-auth-interceptor'])
   };
 })
 .factory('AuthenticationService', function($rootScope, $http, authService, localStorageService, Loader) {
+
+// This function routes the message based upon the model which issued it
+
     var service = {
       login: function(user) {
-        $http.post(base+'/login', user, { ignoreAuthModule: true })
-          .success(function (data, status, headers, config) {
+        io.socket.post(base+'/login', user, function (resdata, jwres) {
+          if(jwres.statusCode != 200){
+            console.log("error!");
+          }
+          data = resdata.MyInfo;
+          data.authorizationToken = data.token;
+          $rootScope.isAuthenticated = true;
+          Loader.hideLoading();
 
-            data = data.MyInfo;
-            data.authorizationToken = data.token;
-            $rootScope.isAuthenticated = true;
-            Loader.hideLoading();
+          // Subscribe to the user model classroom and instance room
+          io.socket.get('/browse/myinfo/10988');
 
-            $http.defaults.headers.common.Authorization = data.authorizationToken;  // Step 1
-            // A more secure approach would be to store the token in SharedPreferences for Android, and Keychain for iOS
-            localStorageService.set('authorizationToken', data.authorizationToken);
-            localStorageService.set('MyInfo', data);
-            // Need to inform the http-auth-interceptor that
-            // the user has logged in successfully.  To do this, we pass in a function that
-            // will configure the request headers with the authorization token so
-            // previously failed requests(aka with status == 401) will be resent with the
-            // authorization token placed in the header
-            authService.loginConfirmed(data, function(config) {  // Step 2 & 3
-              config.headers.Authorization = data.authorizationToken;
-              return config;
-            });
-          })
+          // Listen for the socket 'message'
+          io.socket.on('userinfo', function(message){
+            console.log(message);
+
+            // Okay, I need to route this message to the appropriate place.
+
+            // This message has to do with the User Model
+            /*if (message.model === 'user') {
+             var userId = message.id
+             updateUserInDom(userId, message);
+
+             if(message.verb !== "destroy") {
+             displayFlashActivity(message);
+             }
+             }*/
+          });
+
+          $http.defaults.headers.common.Authorization = data.authorizationToken;  // Step 1
+          // A more secure approach would be to store the token in SharedPreferences for Android, and Keychain for iOS
+          localStorageService.set('authorizationToken', data.authorizationToken);
+          localStorageService.set('MyInfo', data);
+          // Need to inform the http-auth-interceptor that
+          // the user has logged in successfully.  To do this, we pass in a function that
+          // will configure the request headers with the authorization token so
+          // previously failed requests(aka with status == 401) will be resent with the
+          // authorization token placed in the header
+          authService.loginConfirmed(data, function(config) {  // Step 2 & 3
+            config.headers.Authorization = data.authorizationToken;
+            return config;
+          });
+        });/*
+          .success()
           .error(function (data, status, headers, config) {
             $rootScope.$broadcast('event:auth-login-failed', status);
-          });
+          });*/
       },
 
       register: function(user) {

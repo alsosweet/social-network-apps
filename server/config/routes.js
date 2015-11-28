@@ -35,11 +35,13 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  'get /browse/userinfo/:id?':'BrowseController.viewUserInfo',
-  'get /browse/:page?':'BrowseController.viewUserPage',
+  //'get /browse/userinfo/:id?':'BrowseController.viewUserInfo',
+  //'get /browse/:page?':'BrowseController.viewUserPage',
   'post /login':'AuthController.login',
   'post /register':'AuthController.register',
-  'get /testurl':'AuthController.test'
+  'get /testurl':'AuthController.test',
+  //'get /browse/myinfo/:id?':'BrowseController.viewMyInfo',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
