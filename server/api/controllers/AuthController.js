@@ -56,9 +56,10 @@ module.exports = {
             return res.unAuthorized('邮箱地址或密码为空，请重新输入！');
         }
 
-        UserInfo.findOne({email:email}).populate('city').exec(function(e, r){
+        UserInfo.findOne({email:email}).populate('city').populate('gifts').exec(function(e, r){
             if (e) return res.negotiate(e);
             if (!r) return res.notFound("邮箱地址或密码错误！");
+
             var saltPassword = md5(password);
             if(saltPassword == r.password){
                 delete r.password;

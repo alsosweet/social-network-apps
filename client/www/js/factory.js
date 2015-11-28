@@ -84,7 +84,7 @@ angular.module('starter.factory', [])
 
         $timeout(function() {
           self.hideLoading();
-        }, timeout || 2000);
+        }, timeout || 1300);
       }
 
     };

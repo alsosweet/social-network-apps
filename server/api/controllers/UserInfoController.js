@@ -1,29 +1,26 @@
 /**
- * SettingController
+ * UserInfoController
  *
- * @description :: Server-side logic for managing settings
+ * @description :: Server-side logic for managing Userinfoes
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
 
-    viewMyInfo: function(req, res){
+    MyInfo: function(req, res){
         UserInfo.find({userid:req.param('id')}).populate('city').populate('gifts').exec(function(e, r){
             if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
             if (r.length == 0) return res.notFound();
-            var twitts=[];
-            twitts.push(r);
+
             UserInfo.subscribe(req.socket, r);
 
         });
     },
 
-    viewUserInfo: function(req, res){
+    find: function(req, res){
         UserInfo.find({userid:req.param('id')}).populate('city').populate('gifts').exec(function(e, r){
             if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
             if (r.length == 0) return res.notFound();
-
-
 
             // Inform other sockets (e.g. connected sockets that are subscribed) that the session for this user has ended.
             UserInfo.publishUpdate(req.param('id'), {
@@ -41,7 +38,7 @@ module.exports = {
                 }else if(id.toString().length == 2){
                     id = '0'+id;
                 }
-                if(r[i].sex == '女'){
+                if(r[i].sex == 'Ů'){
                     r[i].avatar = 'http://picc.eckuku.com/user_data7/'+r[i].vir_age+'/'+id+'_avatar_big.jpg';
                 }else{
                     if(r[i].vir_age >33) r[i].vir_age = 30;
@@ -53,7 +50,7 @@ module.exports = {
             return res.json({UserInfo: r});
         });
     },
-    viewUserPage: function(req, res){
+    UserPage: function(req, res){
         BrowseServices.userscount(function(err, total){
             if(err) return sails.log.error('viewUserPage:',err);
             req.total = total;
@@ -67,7 +64,7 @@ module.exports = {
                     }else if(id.toString().length == 2){
                         id = '0'+id;
                     }
-                    if(r[i].sex == '女'){
+                    if(r[i].sex == 'Ů'){
                         r[i].avatar = 'http://picc.eckuku.com/user_data7/'+r[i].vir_age+'/'+id+'_avatar_big.jpg';
                     }else{
                         if(r[i].vir_age >33) r[i].vir_age = 30;

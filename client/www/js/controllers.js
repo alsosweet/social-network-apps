@@ -106,6 +106,25 @@ angular.module('starter.controllers', ['compareTo'])
       $state.go('firstShow', {}, {reload: true, inherit: false});
       return;
     }
+    // Subscribe to the user model classroom and instance room
+    io.socket.get('/browse/myinfo/10988');
+    // Listen for the socket 'message'
+    io.socket.on('userinfo', function(message){
+      console.log(message);
+
+      // Okay, I need to route this message to the appropriate place.
+
+      // This message has to do with the User Model
+      /*if (message.model === 'user') {
+       var userId = message.id
+       updateUserInDom(userId, message);
+
+       if(message.verb !== "destroy") {
+       displayFlashActivity(message);
+       }
+       }*/
+    });
+
     $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
 
     $scope.myInfo = localStorageService.get('MyInfo').user;
