@@ -1,4 +1,4 @@
-var base = 'http://localhost:1337';
+var base = 'http://192.168.199.235:1337';
 
 angular.module('starter.factory', [])
   .factory('TwittSrv', function($q, $timeout, $http){
@@ -23,7 +23,7 @@ angular.module('starter.factory', [])
     };
 
     function getTwitts(){
-      return $http.get(base + '/browse/' + page);
+      return $http.get(base + '/UserPage/' + page);
       //return $q.when(angular.copy(twitts));
     }
 
@@ -34,7 +34,7 @@ angular.module('starter.factory', [])
         page--;
       }
 
-      return $http.get(base + '/browse/' + page);
+      return $http.get(base + '/UserPage/' + page);
       /*
       var defer = $q.defer();
       $timeout(function(){
@@ -46,7 +46,7 @@ angular.module('starter.factory', [])
 
     function getMoreTwitts(){
       page++;
-      return $http.get(base + '/browse/' + page);
+      return $http.get(base + '/UserPage/' + page);
      /*
       var defer = $q.defer();
 
@@ -220,7 +220,7 @@ angular.module('starter.factory', [])
       var UserAPI = {
 
         getUserInfo: function(userid) {
-          return $http.get(base + '/browse/userinfo/' + userid);
+          return $http.get(base + '/info/' + userid);
         },
 
         getCartItems: function() {
@@ -234,7 +234,7 @@ angular.module('starter.factory', [])
         },
 
         getPurchases: function() {
-          return $http.get(base + '/testurl');
+          //return $http.get(base + '/testurl');
         },
 
         addPurchase: function(cart) {

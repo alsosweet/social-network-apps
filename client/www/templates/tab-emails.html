@@ -39,7 +39,7 @@
   -->
    <ion-content ng-init="" has-header="true" ng-show="active_content=='orders'">
      <ion-list>
-       <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="email in emails" type="item-text-wrap" >
+       <ion-item class="item-remove-animate item-thumbnail-left" collection-repeat="email in emails" type="item-text-wrap" >
          <img class ="myavatar" ui-sref="event({eventId:email.id})" ng-src="{{email.src}}">
          <p class="pos-absolute-right">2015-10-24</p>
          <h2>{{email.name}}你才是大傻逼xx</h2>

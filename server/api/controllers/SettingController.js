@@ -45,7 +45,7 @@ module.exports = {
         });
     },
     viewSeen: function(req, res){
-        Seen.find({userid:10988}).populate('fromuserid').exec(function(e, r){
+        Seen.find({userid:232}).populate('fromuserid').exec(function(e, r){
             return res.json({UserInfo: r});
         });
     },
@@ -89,5 +89,6 @@ module.exports = {
             return res.json({ChongZhi: r});
         });
     },
+
 };
 

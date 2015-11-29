@@ -35,12 +35,11 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  //'get /browse/userinfo/:id?':'BrowseController.viewUserInfo',
+  'get /info/:id?':'UserInfoController.info',
   //'get /browse/:page?':'BrowseController.viewUserPage',
   'post /login':'AuthController.login',
   'post /register':'AuthController.register',
-  'get /testurl':'AuthController.test',
-  //'get /browse/myinfo/:id?':'BrowseController.viewMyInfo',
+  'get /userpage/:page?':'UserInfoController.UserPage',
 
   /***************************************************************************
   *                                                                          *

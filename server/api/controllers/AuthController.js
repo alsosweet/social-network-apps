@@ -4,7 +4,6 @@
  * @description :: Server-side logic for managing AuthController
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var jwt = require('jwt-simple');
 var md5 = require('md5');
 
 module.exports = {
@@ -40,7 +39,7 @@ module.exports = {
                 return res.negotiate(e);
             }else{
                 delete c.password;
-                return res.json({MyInfo: genToken(c)});
+                return res.json({MyInfo: jwtAuth.genToken(c)});
             }
         });
     },
@@ -62,20 +61,18 @@ module.exports = {
 
             var saltPassword = md5(password);
             if(saltPassword == r.password){
-                delete r.password;
-                return res.json({MyInfo: genToken(r)});
+                return res.json({MyInfo: jwtAuth.genToken(r)});
             }else{
                 return res.forbidden("邮箱地址或密码错误！");
             }
         });
     },
 
-    test: function(req, res){
-        if(req.headers.authorization)
-        return res.ok();
-        return res.unAuthorized('邮箱地址或密码为空，请重新输入！');
-    },
 
+    logout: function(req, res){
+        //need to unsubscribe
+        //UserInfo.unsubscribe(req.socket, r);
+    }
     validate: function(id, callback) {
 
         UserInfo.findOne({userid:id}).exec(function(e, r){
@@ -86,23 +83,4 @@ module.exports = {
     }
 
 };
-
-// private method
-function genToken(user) {
-    var expires = expiresIn(7); // 7 days
-    var token = jwt.encode({
-        exp: expires,
-        user: user,
-    }, require('../utils/secret'));
-    return {
-        token: token,
-        expires: expires,
-        user: user
-    };
-}
-
-function expiresIn(numDays) {
-    var dateObj = new Date();
-    return dateObj.setDate(dateObj.getDate() + numDays);
-}
 

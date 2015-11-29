@@ -5,6 +5,5 @@
     "ionic": "driftyco/ionic-bower#1.1.0",
     "angular-http-auth": "https://github.com/witoldsz/angular-http-auth.git#1.2.2",
     "angular-local-storage": "~0.1.5",
-    "sails.io.js":"~0.11.7"
   }
 }

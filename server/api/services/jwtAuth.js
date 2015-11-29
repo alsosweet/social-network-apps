@@ -1,53 +1,28 @@
 var jwt = require('jwt-simple');
 
-module.exports = function(token) {
+module.exports = {
 
-    var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-    var key = (req.body && req.body.x_key) || (req.query && req.query.x_key) || req.headers['x-key'];
+    genToken:function (user) {
+        var expires = expiresIn(7); // 7 days
+        var token = jwt.encode({
+            exp: expires,
+            user: user,
+        }, require('../utils/secret'));
+        return {
+            token: token,
+            expires: expires,
+            user: user
+        };
+    },
 
-    if (token && key) {
+    decToken:function(token){
+        return jwt.decode(token, require('../utils/secret.js'));
+    },
 
-        try {
-            var decoded = jwt.decode(token, require('../utils/secret.js'));
-
-            if (decoded.exp <= Date.now()) {
-                // res, status, data, message, err
-                respHandler(res, 400, null, 'Token Expired', 'Token Expired');
-                return;
-            }
-            var reqUser = decoded.user;
-
-            // user `A` is using user `B`'s token if the below 
-            // condition fails.
-            if (reqUser.email !== key) {
-                // res, status, data, message, err
-                respHandler(res, 401, null, 'Invalid Token or Key', 'Invalid Token or Key');
-                return;
-            } else {
-                validate(reqUser._id, function(err, user) {
-                    if (err) {
-                        // res, status, data, message, err
-                        respHandler(res, 500, null, 'Oops, something went wrong!', 'Oops, something went wrong!');
-                        return;
-                    } else {
-                        if (!user) {
-                            // res, status, data, message, err
-                            respHandler(res, 400, null, 'Invalid User', 'Invalid User');
-                            return;
-                        } else {
-                            next();
-                        }
-                    }
-                });
-            }
-        } catch (err) {
-            // res, status, data, message, err
-            respHandler(res, 500, null, 'Oops, something went wrong!', 'Oops, something went wrong!');
-            return;
-        }
-    } else {
-        // res, status, data, message, err
-        respHandler(res, 401, null, 'Invalid Token or Key', 'Invalid Token or Key');
-        return;
-    }
 }
+
+function expiresIn(numDays) {
+    var dateObj = new Date();
+    return dateObj.setDate(dateObj.getDate() + numDays);
+}
+

@@ -1,5 +1,5 @@
 angular.module('starter.controllers', ['compareTo'])
-.controller('TabCtrl', function($rootScope, $ionicModal, AuthFactory, $location, UserFactory, $scope, Loader) {
+.controller('TabCtrl', function($rootScope, $ionicModal, AuthFactory, $location, AuthenticationService, $scope, Loader) {
 
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
         $scope.loginModal = modal;
@@ -16,7 +16,7 @@ angular.module('starter.controllers', ['compareTo'])
     });
 
       $rootScope.logout = function() {
-        UserFactory.logout();
+        AuthenticationService.logout();
         $rootScope.isAuthenticated = false;
         $location.path('/tab/dash');
         Loader.toggleLoadingWithMessage('注销成功!', 2000);
@@ -106,8 +106,17 @@ angular.module('starter.controllers', ['compareTo'])
       $state.go('firstShow', {}, {reload: true, inherit: false});
       return;
     }
+
+    $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
+
+    $scope.myInfo = localStorageService.get('MyInfo').user;
+
+    $scope.city = $scope.myInfo.city.region_name||$scope.city;
+
     // Subscribe to the user model classroom and instance room
-    io.socket.get('/browse/myinfo/10988');
+    io.socket.get('/info/'+$scope.myInfo.userid, {token: authToken}, function(response) {
+      console.log('got response', response)
+    });
     // Listen for the socket 'message'
     io.socket.on('userinfo', function(message){
       console.log(message);
@@ -124,12 +133,6 @@ angular.module('starter.controllers', ['compareTo'])
        }
        }*/
     });
-
-    $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
-
-    $scope.myInfo = localStorageService.get('MyInfo').user;
-
-    $scope.city = $scope.myInfo.city.region_name||$scope.city;
 
     //$ionicNavBarDelegate.align('center');
     TwittSrv.getTwitts().then(function(twitts){

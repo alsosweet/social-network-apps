@@ -28,7 +28,7 @@ module.exports = {
     },
     addtime: {
       type: 'integer',
-      size: 10,
+      size: 20,
     },
   }
 };
