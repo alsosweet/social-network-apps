@@ -1,5 +1,5 @@
 angular.module('starter.controllers', ['compareTo'])
-.controller('TabCtrl', function($rootScope, $ionicModal, AuthFactory, $location, AuthenticationService, $scope, Loader) {
+.controller('TabCtrl', function($ionicModal, $location, $scope,msgCenter) {
 
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
         $scope.loginModal = modal;
@@ -15,12 +15,19 @@ angular.module('starter.controllers', ['compareTo'])
       $scope.loginModal.remove();
     });
 
-      $rootScope.logout = function() {
-        AuthenticationService.logout();
-        $rootScope.isAuthenticated = false;
-        $location.path('/tab/dash');
-        Loader.toggleLoadingWithMessage('注销成功!', 2000);
+    $scope.msgC = msgCenter.get();
+    $scope.$on('event:user info changed', function(){
+      $scope.msgC = msgCenter.get();
+      if(!$scope.$$phase) {
+        //$digest or $apply
+        $scope.$digest();
       }
+    });
+
+    $scope.go = function (path) {
+      $location.path(path);
+    };
+
   }
 )
 .controller('LoginCtrl', function($scope, $http, $state, $rootScope, AuthenticationService, Loader) {
@@ -82,11 +89,6 @@ angular.module('starter.controllers', ['compareTo'])
       Loader.toggleLoadingWithMessage(error);
     });
 
-    $scope.$on('event:auth-logout-complete', function() {
-      console.log("logout complete");
-      $state.go('tab.dash', {}, {reload: true, inherit: false});
-    });
-
     $scope.$on('event:auth-loginCancelled', function() {
       console.log("login cancelled");
       $scope.loginModal.hide();
@@ -95,11 +97,11 @@ angular.module('starter.controllers', ['compareTo'])
 
   })
 .controller('LogoutCtrl', function($scope, AuthenticationService) {
-  $scope.$on('$ionicView.enter', function() {
+/*  $scope.$on('$ionicView.enter', function() {
     AuthenticationService.logout();
-  });
+  });*/
 })
-.controller('DashCtrl', function($scope, $ionicNavBarDelegate,$state, TwittSrv, localStorageService) {
+.controller('DashCtrl', function($scope, $rootScope, $ionicNavBarDelegate,$state, TwittSrv, localStorageService, myInfo) {
 
     var authToken = localStorageService.get('authorizationToken');
     if(!authToken){
@@ -109,30 +111,13 @@ angular.module('starter.controllers', ['compareTo'])
 
     $scope.cycle = [];//TypeError: Cannot read property 'concat' of undefined
 
-    $scope.myInfo = localStorageService.get('MyInfo').user;
+    $scope.user = myInfo.get();
 
-    $scope.city = $scope.myInfo.city.region_name||$scope.city;
+    $scope.city = angular.isUndefined($scope.user.city) ? '': $scope.user.city.region_name;
 
-    // Subscribe to the user model classroom and instance room
-    io.socket.get('/info/'+$scope.myInfo.userid, {token: authToken}, function(response) {
-      console.log('got response', response)
-    });
-    // Listen for the socket 'message'
-    io.socket.on('userinfo', function(message){
-      console.log(message);
-
-      // Okay, I need to route this message to the appropriate place.
-
-      // This message has to do with the User Model
-      /*if (message.model === 'user') {
-       var userId = message.id
-       updateUserInDom(userId, message);
-
-       if(message.verb !== "destroy") {
-       displayFlashActivity(message);
-       }
-       }*/
-    });
+// //   $scope.$watch(function () { return myInfo.get(); }, function (newValue, oldValue) {
+ //     if (newValue !== oldValue) $scope.user = newValue;
+ //   });
 
     //$ionicNavBarDelegate.align('center');
     TwittSrv.getTwitts().then(function(twitts){
@@ -214,12 +199,53 @@ angular.module('starter.controllers', ['compareTo'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
-.controller('ProfileCtrl', function($scope) {
+.controller('ProfileCtrl', function($scope,$rootScope, $state, $ionicHistory, $stateParams, myInfo, UserFactory, Loader, msgCenter) {
+
+    $scope.info = myInfo.get();
+
+    $scope.$on('$ionicView.enter', function() {
+      var tmp = msgCenter.get();
+      if(tmp.seen != 0){
+        UserFactory.postSeen().success(function (data, status, headers, config) {
+          msgCenter.set({seen: 0});
+        });
+      }
+    });
+
+    $rootScope.$on('event:someone see you', function(){
+      //$state.forceReload();
+      //$state.go($state.current.name, {}, {reload: true});
+      UserFactory.getSeen().success(function (data, status, headers, config) {
+        $scope.seen = data;
+        var n = 0;
+        for(var i = 0; i<data.length; i++){
+          if(data[i].sign == 0) n++;
+        }
+        msgCenter.set({seen: n});
+      }).error(function (data, status, headers, config) {
+        Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+      });
+    });
+
+    $rootScope.$broadcast('event:someone see you');
+
     $scope.settings = {
       enableFriends: true
     };
   })
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $ionicHistory, $state, AuthenticationService, Loader) {
+    $scope.logout = function() {
+      AuthenticationService.logout();
+    }
+
+    $scope.$on('event:auth-logout-complete', function() {
+
+      Loader.toggleLoadingWithMessage('注销成功!', 2000);
+      $ionicHistory.clearCache().then(function(){
+        $state.go('tab.dash', {}, {reload: true, inherit: false});
+      });
+    });
+
   $scope.settings = {
     enableFriends: true
   };
@@ -399,4 +425,15 @@ angular.module('starter.controllers', ['compareTo'])
         }, 300000);
       };
     }
-);
+).config(function($provide) {
+    $provide.decorator('$state', function($delegate, $stateParams) {
+      $delegate.forceReload = function() {
+        return $delegate.go($delegate.current, $stateParams, {
+          reload: true,
+          inherit: false,
+          notify: true
+        });
+      };
+      return $delegate;
+    });
+  });

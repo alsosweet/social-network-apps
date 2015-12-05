@@ -36,6 +36,7 @@
 
 .myavatar {
   border-radius: 4px;
+  margin: 0px 1px;
 }
 
 .item-note.my-item-note{
@@ -55,7 +56,7 @@
 }
 
 .title-info{
-  padding : 12px;
+  padding : 8px 8px 4px;
   border: 0px;
   font-family: 'Helvetica Neue', Roboto, 'Segoe UI', sans-serif !important;
   color: #444;

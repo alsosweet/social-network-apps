@@ -38,7 +38,6 @@ module.exports = {
                 // Otherwise, send back something reasonable as our error response.
                 return res.negotiate(e);
             }else{
-                delete c.password;
                 return res.json({MyInfo: jwtAuth.genToken(c)});
             }
         });
@@ -68,11 +67,13 @@ module.exports = {
         });
     },
 
-
     logout: function(req, res){
-        //need to unsubscribe
-        //UserInfo.unsubscribe(req.socket, r);
-    }
+
+        UserInfo.unsubscribe(req.socket, req.token.user);
+        req.token = null;
+        return res.ok();
+    },
+
     validate: function(id, callback) {
 
         UserInfo.findOne({userid:id}).exec(function(e, r){

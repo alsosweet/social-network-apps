@@ -32,8 +32,18 @@ module.exports.policies = {
     'info': ['tokenAuth'],
     'UserPage': true,
     '*': false
+  },
+  'AuthController':{
+    '*': false,
+    'register':true,
+    'login':true,
+    'logout':['tokenAuth']
+  },
+  'SeenController':{
+    '*':false,
+    'seen':['tokenAuth'],
+    'clearSeen':['tokenAuth'],
   }
-
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *

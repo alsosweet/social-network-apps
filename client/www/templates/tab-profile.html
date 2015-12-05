@@ -9,10 +9,10 @@
     <div class="list card">
 
       <a class="item item-thumbnail-left" href="#">
-        <img src="http://lorempixel.com/60/60">
-        <h2>Pretty Hate Machine</h2>
-        <p>ID：303453463</p>
-        <p class="positive">积分：10</p>
+        <img ng-src="{{info.avatar}}">
+        <h2>{{info.username}}</h2>
+        <p>ID：{{info.userid}}</p>
+        <p class="positive">积分：{{info.point}}</p>
       </a>
 
 
@@ -34,14 +34,7 @@
       <div class="title-info"><span>谁看了我</span></div>
 
       <ion-scroll direction="x" class="wide-as-needed">
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
-        <a href="#"><img class = "myavatar" src="http://lorempixel.com/100/100"></a>
+        <span ng-repeat="see in seen"><img class = "myavatar" width="61px" height="80px" ui-sref="event({eventId:see.fromuserid.userid})" ng-src="{{see.fromuserid.avatar}}"></span>
       </ion-scroll>
     </div>
 

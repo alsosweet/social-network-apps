@@ -26,20 +26,28 @@ module.exports = {
                 if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
                 if (r.length == 0) return res.notFound();
 
-                Seen.create({
-                    userid: r[0].userid,
-                    fromuserid: token.user.userid,
-                    sign: 0,
-                    addtime: Date.now()
-                }).exec(function(err,data){
+                Seen.updateOrCreate(r[0].userid,token.user.userid).then(function(ua) {
+                    // ... success logic here
+                    UserInfo.publishUpdate(req.param('id'), {
+                        fromuser:token.user,
+                        seen:ua,
+                        action: 1,//' 某人看了你'
+                    });
+                }).catch(function(e) {
+                    // ... error handling here
+                    return;
+                });
+
+/*
+                    exec(function(err,data){
                     if(err) return;
                     // Inform other sockets (e.g. connected sockets that are subscribed) that the session for this user has ended.
                     UserInfo.publishUpdate(req.param('id'), {
                         fromuser:token.user,
                         seen:data,
-                        action: ' 某人看了你'
+                        action: 1,//' 某人看了你'
                     });
-                });
+                });*/
 
                 return res.json({UserInfo: virtualization.varatr(r, null)});
             });

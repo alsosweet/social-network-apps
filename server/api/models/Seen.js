@@ -13,6 +13,7 @@ module.exports = {
       size:10,
       unique: true,
       primaryKey: true,
+      autoIncrement: true
     },
     userid: {
       model: 'UserInfo',
@@ -30,5 +31,38 @@ module.exports = {
       type: 'integer',
       size: 20,
     },
+  },
+  updateOrCreate: function (userid, fromuserid) {
+    return Seen.findOne({where:{userid: userid,fromuserid:fromuserid},
+                          sort: 'id DESC'
+    }).then(function (ua){
+          if (ua) {
+            return Seen.update({id: ua.id}, {addtime: Date.now(),sign: 0});
+          } else {
+            // Seen does not exist. Create.
+            return Seen.create({
+              userid: userid,
+              fromuserid: fromuserid,
+              sign: 0,
+              addtime: Date.now()
+            });
+          }
+        });
+
+     /*   exec(function(err, ua){
+      if (ua) {
+        return Seen.update({id: ua.id}, {addtime: Date.now(),sign: 0});
+      } else {
+        // Seen does not exist. Create.
+        return Seen.create({
+          userid: userid,
+          fromuserid: fromuserid,
+          sign: 0,
+          addtime: Date.now()
+        });
+      }
+    });*/
+
+
   }
 };

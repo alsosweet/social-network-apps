@@ -11,7 +11,7 @@ angular.module('starter', [
   'starter.controllers',
   'starter.services',
   'starter.factory'])
-.run(function($ionicPlatform, $http, localStorageService, authService, $rootScope) {
+.run(function($ionicPlatform, $http, $rootScope, localStorageService, authService, myInfo) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,6 +26,17 @@ angular.module('starter', [
     }
     var authToken = localStorageService.get('authorizationToken');
     if(authToken){
+      var user = myInfo.get();
+      // Subscribe to the user model classroom and instance room
+      io.socket.get('/info/'+user.userid, {token: authToken}, function(response) {
+        console.log('got response', response);
+      });
+      // Listen for the socket 'message'
+      io.socket.on('userinfo', function(message){
+        console.log(message);
+        myInfo.updateFromServer(message);
+      });
+
       $rootScope.isAuthenticated = true;
       $http.defaults.headers.common.Authorization = authToken;  // Step 1
       // Need to inform the http-auth-interceptor that
@@ -40,7 +51,6 @@ angular.module('starter', [
     }else{
       $rootScope.isAuthenticated = false;
     }
-
   });
 })
   .config(function($ionicConfigProvider) {
@@ -77,7 +87,7 @@ angular.module('starter', [
 
   .state('tab.emails', {
       url: '/emails',
-      cache: false, //另一种方法就是在html文件加入cache-view="false"
+      //cache: false, //另一种方法就是在html文件加入cache-view="false"
       views: {
         'tab-emails': {
           templateUrl: 'templates/tab-emails.html',
@@ -87,7 +97,6 @@ angular.module('starter', [
     })
     .state('tab.email-detail', {
       url: '/emails/:chatId',
-      cache: false,
       views: {
         'tab-emails': {
           templateUrl: 'templates/email-detail.html',
@@ -97,7 +106,6 @@ angular.module('starter', [
     })
     .state('tab.chats', {
       url: '/chats',
-      cache: false,
       views: {
         'tab-chats': {
           templateUrl: 'templates/tab-chats.html',
@@ -107,7 +115,6 @@ angular.module('starter', [
     })
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
-      cache: false,
       views: {
         'tab-chats': {
           templateUrl: 'templates/chat-detail.html',
@@ -117,7 +124,7 @@ angular.module('starter', [
     })
     .state('tab.profile', {
       url: '/profile',
-      cache: false,
+      //cache: false,
       views: {
         'tab-profile': {
           templateUrl: 'templates/tab-profile.html',
@@ -127,7 +134,6 @@ angular.module('starter', [
     })
   .state('tab.account', {
     url: '/account',
-    cache: false,
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
@@ -137,7 +143,6 @@ angular.module('starter', [
   })
     .state('personalInfo', {
       url: '/personalinfo',
-      cache: false,
       templateUrl: 'templates/personal-info.html',
       controller: 'PersonalInfoCtrl'
     })
@@ -151,18 +156,8 @@ angular.module('starter', [
       templateUrl: 'templates/first-show.html',
       controller: 'FirstShowCtrl'
     })
-    .state('tab.logout', {
-      url: "/logout",
-      views: {
-        'tab-logout' :{
-          controller: "LogoutCtrl",
-          templateUrl: 'templates/tab-dash.html'
-        }
-      }
-    })
     .state('emailSending', {
       url: '/emailSending/:sendId',
-      cache: false,
       templateUrl: 'templates/email-sending.html',
       controller: 'EmailSendingCtrl'
     });

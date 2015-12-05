@@ -1,6 +1,7 @@
 var base = 'http://192.168.199.235:1337';
 
 angular.module('starter.factory', [])
+
   .factory('TwittSrv', function($q, $timeout, $http){
     'use strict';
     var page = parseInt(Math.random()*50, 10);
@@ -138,7 +139,6 @@ angular.module('starter.factory', [])
 
   }])
 
-
   .factory('AuthFactory', ['LSFactory', function(LSFactory) {
 
     var userKey = 'user';
@@ -223,9 +223,11 @@ angular.module('starter.factory', [])
           return $http.get(base + '/info/' + userid);
         },
 
-        getCartItems: function() {
-          var userId = AuthFactory.getUser()._id;
-          return $http.get(base + '/api/v1/users/' + userId + '/cart');
+        getSeen: function() {
+          return $http.get(base + '/seen/seen');
+        },
+        postSeen:function() {
+          return $http.post(base + '/seen/');
         },
 
         addToCart: function(book) {

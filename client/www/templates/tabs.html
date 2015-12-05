@@ -11,17 +11,17 @@ navigation history that also transitions its views in and out.
   </ion-tab>
 
   <!-- email Tab -->
-  <ion-tab title="信息" icon-off="ion-ios-email-outline" icon-on="ion-ios-email" href="#/tab/emails">
+  <ion-tab title="信息" badge="msgC.emails" badge-style="badge-assertive" icon-off="ion-ios-email-outline" icon-on="ion-ios-email" href="#/tab/emails">
     <ion-nav-view name="tab-emails"></ion-nav-view>
   </ion-tab>
 
   <!-- Chats Tab -->
-  <ion-tab title="招呼" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/chats">
+  <ion-tab title="招呼" badge="msgC.sayhi" badge-style="badge-assertive" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/chats">
     <ion-nav-view name="tab-chats"></ion-nav-view>
   </ion-tab>
 
   <!-- Myinfo Tab -->
-  <ion-tab title="我" icon-off="ion-ios-person-outline" icon-on="ion-ios-person" href="#/tab/profile">
+  <ion-tab title="我" badge="msgC.me" ng-click="go('/tab/profile')" badge-style="badge-assertive" icon-off="ion-ios-person-outline" icon-on="ion-ios-person">
     <ion-nav-view name="tab-profile"></ion-nav-view>
   </ion-tab>
 
