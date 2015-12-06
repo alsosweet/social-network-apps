@@ -13,6 +13,7 @@ module.exports = {
       size:10,
       unique: true,
       primaryKey: true,
+      autoIncrement: true
     },
     userid: {
       model: 'UserInfo',
@@ -22,17 +23,17 @@ module.exports = {
       model: 'UserInfo',
       required: true
     },
-    /*¶ÔÓ¦ÕÐºôµÄ±àºÅ*/
+    /*ï¿½ï¿½Ó¦ï¿½Ðºï¿½ï¿½Ä±ï¿½ï¿½*/
     message: {
       model: 'Qing_zhaohu',
       required: true
     },
-    /*Sign: 1±íÊ¾ºöÂÔ 0 ±íÊ¾Î´²é¿´*/
+    /*Sign: 1ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ 0 ï¿½ï¿½Ê¾Î´ï¿½é¿´*/
     sign: {
       type: 'integer',
       size: 5,
     },
-    /*Reback  1±íÊ¾»Ø¸´ 0 ±íÊ¾Î´»Ø¸´*/
+    /*Reback  1ï¿½ï¿½Ê¾ï¿½Ø¸ï¿½ 0 ï¿½ï¿½Ê¾Î´ï¿½Ø¸ï¿½*/
     reback: {
       type: 'integer',
       size: 1,

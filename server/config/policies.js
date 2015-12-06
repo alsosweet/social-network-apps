@@ -33,16 +33,25 @@ module.exports.policies = {
     'UserPage': true,
     '*': false
   },
+
   'AuthController':{
     '*': false,
     'register':true,
     'login':true,
     'logout':['tokenAuth']
   },
+
   'SeenController':{
     '*':false,
     'seen':['tokenAuth'],
     'clearSeen':['tokenAuth'],
+  },
+
+  'HelloController':{
+    '*':false,
+    'hello':['tokenAuth'],
+    'respond':['tokenAuth'],
+    'del':['tokenAuth', 'ownUser'],
   }
   /***************************************************************************
   *                                                                          *

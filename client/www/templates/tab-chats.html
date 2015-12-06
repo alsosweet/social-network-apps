@@ -1,19 +1,20 @@
 <ion-view view-title="收到招呼">
-  <ion-content ng-init="loadMessages()">
+  <ion-content>
+    <ion-refresher pulling-text="向下拉更新..." on-refresh="helloRefresh()"></ion-refresher>
     <ion-list>
-      <ion-item class="item-remove-animate item-thumbnail-left" collection-repeat="message in messages" type="item-text-wrap" href="#">
-        <img class ="myavatar" ng-src="{{message.src}}">
-        <p class="pos-absolute-right">2015-10-24</p>
-        <h2>{{message.name}}A大傻逼xxxx</h2>
+      <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="hello in hellos" type="item-text-wrap">
+        <img class ="myavatar" ng-src="{{hello.fromuserid.avatar}}" ui-sref="event({eventId:hello.fromuserid.userid})">
+        <p class="pos-absolute-right">{{hello.addtime}}</p>
+        <h2>{{hello.fromuserid.username}}</h2>
 
-        <p>{{message.age}}岁</p>
-        <img ng-src="http://lorempixel.com/20/20"><span>你好吗，最近过的怎么样</span>
+        <p>{{hello.fromuserid.age}}岁</p>
+        <span ng-bind-html="hello.message.title"></span>
         <!--<i class="icon ion-chevron-right icon-accessory">回招呼</i>-->
-        <button class="button button-outline button-small button-positive pos-absolute-right">
+        <button class="button button-outline button-small button-positive pos-absolute-right" ng-click="respond(hello)">
           回招呼
         </button>
 
-        <ion-option-button class="button-assertive" ng-click="">
+        <ion-option-button class="button-assertive" ng-click="delete(hello)">
           Delete
         </ion-option-button>
       </ion-item>

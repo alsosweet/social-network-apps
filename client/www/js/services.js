@@ -28,18 +28,15 @@ angular.module('starter.services', ['http-auth-interceptor'])
           msgC[prop] = data[prop]
         }
       }
-      //msgC.me = msgC.seen + msgC.gifts+msgC.meet;
+      msgC.me = msgC.seen + msgC.gifts+msgC.meet;//updated
       localStorageService.set('msgCenter', msgC);
       $rootScope.$broadcast('event:user info changed');
     },
   };
 })
-.factory('myInfo', function($http, $rootScope,  localStorageService, msgCenter) {
+.factory('myInfo', function($http, $rootScope,  localStorageService, msgCenter, UserFactory, Loader) {
   var user;
-
-    $rootScope.$on('event:someone see you', function(){
-        console.log('myInfo:event:someone see you');
-    });
+  var seen;
 
   return {
     get: function() {
@@ -55,14 +52,58 @@ angular.module('starter.services', ['http-auth-interceptor'])
 
     updateFromServer: function(message) {
 
-      switch (message.data.action){
+      var action;
+
+      if(typeof(message) === 'object'){
+        action = message.data.action;
+      }else{
+        action = message;
+      }
+
+      switch (action){
+
         case 1:
-          $rootScope.$broadcast('event:someone see you');
+          UserFactory.getSeen().success(function (data, status, headers, config) {
+            seen = data;
+            var n = 0;
+            for(var i = 0; i<data.length; i++){
+              if(data[i].sign == 0) n++;
+            }
+            msgCenter.set({seen: n});
+            $rootScope.$broadcast('event:someone see you');
+
+          }).error(function (data, status, headers, config) {
+            Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+          });
+          break;
+
+        case 2:
+          UserFactory.getHellos().success(function (data, status, headers, config) {
+            hellos = data;
+            var n = 0;
+            for(var i = 0; i<data.length; i++){
+              if(data[i].reback == 0) n++;
+            }
+            msgCenter.set({sayhi: n});
+            $rootScope.$broadcast('event:someone say hi');
+
+          }).error(function (data, status, headers, config) {
+            Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+          });
           break;
         default :
               break;
       }
+    },
+
+    getSeen: function(){
+      return seen;
+    },
+
+    getHellos: function(){
+      return hellos;
     }
+
   };
 })
 .factory('Chats', function() {

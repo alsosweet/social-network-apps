@@ -25,8 +25,7 @@
     "branch": "master",
     "commit": "d4aeeb4dc4105da6254b5b73ceb397efc8324cae"
   },
-  "_source": "git://github.com/loringdodge/ionic-nifty-modal.git",
+  "_source": "https://github.com/loringdodge/ionic-nifty-modal.git",
   "_target": "*",
-  "_originalSource": "ionic-nifty-modal",
-  "_direct": true
+  "_originalSource": "https://github.com/loringdodge/ionic-nifty-modal.git"
 }

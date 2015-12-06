@@ -226,8 +226,21 @@ angular.module('starter.factory', [])
         getSeen: function() {
           return $http.get(base + '/seen/seen');
         },
-        postSeen:function() {
+        postSeen: function() {
           return $http.post(base + '/seen/');
+        },
+        getHellos: function(){
+          return $http.get(base + '/hello/hello');
+        },
+        helloRespond: function(hello) {
+          return $http.post(base + '/hello/respond', hello);
+        },
+        helloDelete: function(hello) {
+          return $http.post(base + '/hello/del', hello);
+        },
+
+        getZhaohu: function(){
+          return $http.get(base + '/qing_zhaohu/viewzhaohu');
         },
 
         addToCart: function(book) {

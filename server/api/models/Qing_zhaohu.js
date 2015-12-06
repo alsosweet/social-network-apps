@@ -13,7 +13,6 @@ module.exports = {
       type: 'integer',
       unique: true,
       primaryKey: true,
-      columnName: 'the_primary_key'
     },
     title: {
       type: 'string',

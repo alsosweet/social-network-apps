@@ -1,14 +1,31 @@
-<ion-modal-view class="ion-nifty-modal ">
-<div class="ion-modal-content-custom" ng-click="closeModal()">
-  <ion-pane class="">
-    <div class="row">
-      <div class="col-50"><img src="img/poke/cyx.gif" width="28px" height="28px"><span>见一面吗 ?</span></div>
-      <div class="col-50"><img src="img/poke/fw.gif" width="28px" height="28px"><span>握个手吧~~~~~~</span> </div>
+<ion-modal-view class="ion-nifty-modal">
+<ion-pane class="">
+  <ion-header-bar>
+    <h1 class="title">招呼</h1>
+    <div class="buttons">
+      <button class="button button-positive" ng-click="hide()">关闭</button>
     </div>
-    <div class="row">
-      <div class="col-50"><img src="img/poke/dyx.gif" width="28px" height="28px"><span>见一面吗 ?</span></div>
-      <div class="col-50"><img src="img/poke/jy.gif" width="28px" height="28px"><span>握个手吧~~~~~~</span> </div>
-    </div>
-  </ion-pane>
-</div>
+  </ion-header-bar>
+  <ion-content class="">
+
+    <form name="myForm" class="">
+      <ul class="row" ng-repeat="h in hi" ng-if="$index % 2 === 0">
+        <li class="col-50">
+          <label>
+            <input type="radio" ng-model="name.idx" name="n" value="{{hi[$index].id}}" />
+            <span ng-bind-html="hi[$index].title"></span>
+          </label>
+        </li>
+        <li class="col-50">
+          <label>
+            <input type="radio" ng-model="name.idx" name="n" value="{{hi[$index+1].id}}" />
+            <span ng-bind-html="hi[$index+1].title"></span>
+          </label>
+        </li>
+      </ul>
+
+      <button class="button button-block button-outline button-positive" ng-click="submit(name.idx);hide()">提交</button>
+    </form>
+  </ion-content>
+</ion-pane>
 </ion-modal-view>

@@ -33,6 +33,10 @@
 .view-tabs-top .has-header{
   top: 93px;
 }
+/*
+.pane .has-header{
+  top:44px;
+}*/
 
 .myavatar {
   border-radius: 4px;

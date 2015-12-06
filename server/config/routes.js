@@ -41,6 +41,8 @@ module.exports.routes = {
   'post /register':'AuthController.register',
   'post /logout':'AuthController.logout',
   'post /seen':'SeenController.clearSeen',
+  'post /hello/respond':'HelloController.respond',
+  'post /hello/del':'HelloController.del',
 
   /***************************************************************************
   *                                                                          *

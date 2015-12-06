@@ -1,5 +1,5 @@
 angular.module('starter.controllers', ['compareTo'])
-.controller('TabCtrl', function($ionicModal, $location, $scope,msgCenter) {
+.controller('TabCtrl', function($ionicModal, $location, $scope, msgCenter, myInfo) {
 
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
         $scope.loginModal = modal;
@@ -27,6 +27,9 @@ angular.module('starter.controllers', ['compareTo'])
     $scope.go = function (path) {
       $location.path(path);
     };
+
+    myInfo.updateFromServer(1);
+    myInfo.updateFromServer(2);
 
   }
 )
@@ -180,20 +183,77 @@ angular.module('starter.controllers', ['compareTo'])
   .controller('EmailDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
   })
-  .controller('ChatsCtrl', function($scope, Chats) {
+  .controller('ChatsCtrl', function($ionicModal, $rootScope, $scope, myInfo, UserFactory, msgCenter) {
 
-    $scope.messages = [];
-//从services里面取数据  Preload images in Ionic using $ImageCacheFactory
-    $scope.loadMessages = function() {
-      for(var i = 0; i < 20; i++) {
-        $scope.messages.push({
-          name: 'name:'+i,
-          src: "http://localhost:1337/favicon.ico",
-          age:i,
-          lastText:i+'messages example'
-        });
+    $ionicModal.fromTemplateUrl('templates/say-hi.html', function(modal) {
+        $scope.sayhiModal = modal;
+      },
+      {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
       }
+    );
+    //Be sure to cleanup the modal by removing it from the DOM
+    $scope.$on('$destroy', function() {
+      $scope.sayhiModal.remove();
+    });
+
+    $scope.delete = function(hello){
+      UserFactory.helloDelete(hello).success(function (data, status, headers, config) {
+
+        console.log('delete ok:'+status);
+        $scope.hellos.splice($scope.hellos.indexOf(hello), 1);
+        msgCenter.set({sayhi:msgCenter.get().sayhi -1});
+      });
     }
+
+    $scope.hide = function(){
+      $scope.sayhiModal.hide();
+    }
+
+    $scope.name = {idx:1};//Two-way binding works best with a nested object in ng-model
+
+    $scope.respond = function(hello){
+
+      UserFactory.getZhaohu().success(function(data, status, headers, config){
+        if(status == 200){
+          $scope.hi = data.zhaohu;
+          $scope.sayhiModal.show();
+
+          $scope.submit = function(idx){
+
+             UserFactory.helloRespond({message: idx, userid: hello.fromuserid.userid, fromuserid: hello.userid}).success(function (data, status, headers, config) {
+             if(status == 200){
+                UserFactory.helloDelete(hello).success(function (data, status, headers, config) {
+
+                    console.log('delete ok:'+status);
+                    $scope.hellos.splice($scope.hellos.indexOf(hello), 1);
+                    msgCenter.set({sayhi:msgCenter.get().sayhi -1});
+                });
+             }
+             });
+          }
+        }
+      });
+    }
+
+    var wait = 0;
+
+    $scope.helloRefresh = function(){
+      myInfo.updateFromServer(2); //get hellos
+      wait = 1;
+    }
+
+    $rootScope.$on('event:someone say hi', function(){
+      $scope.hellos = myInfo.getHellos();
+      if(wait == 1){
+        $scope.$broadcast('scroll.refreshComplete');
+        wait = 0;
+      }
+    });
+
+    myInfo.updateFromServer(2); //get hellos
 
   })
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
@@ -212,26 +272,12 @@ angular.module('starter.controllers', ['compareTo'])
       }
     });
 
-    $rootScope.$on('event:someone see you', function(){
-      //$state.forceReload();
-      //$state.go($state.current.name, {}, {reload: true});
-      UserFactory.getSeen().success(function (data, status, headers, config) {
-        $scope.seen = data;
-        var n = 0;
-        for(var i = 0; i<data.length; i++){
-          if(data[i].sign == 0) n++;
-        }
-        msgCenter.set({seen: n});
-      }).error(function (data, status, headers, config) {
-        Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
-      });
+    $scope.$on('event:someone see you', function(){
+      $scope.seen = myInfo.getSeen();
     });
 
-    $rootScope.$broadcast('event:someone see you');
+    myInfo.updateFromServer(1); //get seen
 
-    $scope.settings = {
-      enableFriends: true
-    };
   })
 .controller('AccountCtrl', function($scope, $ionicHistory, $state, AuthenticationService, Loader) {
     $scope.logout = function() {
@@ -322,15 +368,15 @@ angular.module('starter.controllers', ['compareTo'])
       tempobj.url = 'templates/image-modal.html';
 
       //需要用promise或其他方法，否则加载完成前显示默认图片
-      $scope.imageSrc = 'http://ionicframework.com/img/ionic-logo-blog.png';
+      $scope.imageSrc = 'http://ionicframework.com/image/ionic-logo-blog.png';
 
       $scope.showImage = function(index) {
         switch(index) {
           case 1:
-            $scope.imageSrc = 'http://ionicframework.com/img/ionic-logo-blog.png';
+            $scope.imageSrc = 'http://ionicframework.com/image/ionic-logo-blog.png';
             break;
           case 2:
-            $scope.imageSrc  = 'http://ionicframework.com/img/ionic_logo.svg';
+            $scope.imageSrc  = 'http://ionicframework.com/image/ionic_logo.svg';
             break;
           case 3:
             $scope.imageSrc  = $scope.userinfo.avatar;
@@ -344,7 +390,7 @@ angular.module('starter.controllers', ['compareTo'])
       $scope.gifts=[];
       for(var i = 1; i<=15; i++){
         $scope.gifts.push({
-          src:'img/gift/'+i+'.gif'
+          src:'image/gift/'+i+'.gif'
         });
       }
 
