@@ -1,4 +1,4 @@
-var base = 'http://192.168.199.235:1337';
+var base = 'http://localhost:1337';
 
 angular.module('starter.factory', [])
 

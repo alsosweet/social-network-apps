@@ -7,6 +7,7 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/chatbox.css" rel="stylesheet">
     <link href="lib/ionic-nifty-modal/nifty.modal.css" rel="stylesheet">
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -21,12 +22,17 @@
 
     <!--<script src="lib/socket.io.js"></script>-->
     <script src="lib/sails.io.js"></script>
-    <script>io.sails.url = "http://192.168.199.235:1337";</script>
+    <script>io.sails.url = "http://localhost:1337";</script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
-    <!-- your app's js -->
+    <script src="lib/2.8.4-moment.min.js"></script>
+    <script src="lib/0.8.2-angular-moment.min.js"></script>
+    <script src="lib/2.4.2-angular-elastic.js"></script>
+    <script src="lib/0.15.0-Autolinker.js"></script>
     <script src="lib/compareTo.module.js"></script>
+    <!-- your app's js -->
+    <script src="js/chat-controller.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>

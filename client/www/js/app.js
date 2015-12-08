@@ -8,6 +8,7 @@
 angular.module('starter', [
   'ionic',
   'LocalStorageModule',
+  'elastichat',
   'starter.controllers',
   'starter.services',
   'starter.factory'])
@@ -84,16 +85,20 @@ angular.module('starter', [
       }
     }
   })
-
-  .state('tab.emails', {
+    .state('tab.emails', {
       url: '/emails',
-      //cache: false, //另一种方法就是在html文件加入cache-view="false"
+      cache: false, //另一种方法就是在html文件加入cache-view="false"
       views: {
         'tab-emails': {
-          templateUrl: 'templates/tab-emails.html',
+          //templateUrl: 'templates/tab-emails.html',
           controller: 'EmailsCtrl'
         }
       }
+    })
+  .state('messages', {
+      url: '/messages',
+      templateUrl: 'templates/tab-emails.html',
+      controller: 'UserMessagesCtrl'
     })
     .state('tab.email-detail', {
       url: '/emails/:chatId',

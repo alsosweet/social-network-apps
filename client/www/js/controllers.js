@@ -169,16 +169,7 @@ angular.module('starter.controllers', ['compareTo'])
     });
   })
 .controller('EmailsCtrl', function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
-
-    $scope.active_content = 'orders';
-
-
-    UserFactory.getPurchases().success(function (data, status, headers, config) {
-      $scope.customers = data;
-    })
-      .error(function (data, status, headers, config) {
-        console.log("Error occurred.  Status:" + status);
-      });
+    $location.path('/messages');
 })
   .controller('EmailDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);

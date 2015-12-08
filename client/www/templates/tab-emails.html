@@ -1,75 +1,80 @@
-<ion-view view-title="我的收信" class="view-tabs-top">
+<ion-view id="userMessagesView"  hide-back-button="true"
+          view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i> <div class='msg-header-username'>{{toUser.username}}</div>">
 
-  <div class="tabs tabs-top tabs-virtual">
-    <a href class="tab-item disable-user-behavior"
-       ng-class="{active: active_content=='orders'}" ng-click="setActiveContent('orders')">
-      收件箱
-    </a>
-    <a href class="tab-item disable-user-behavior"
-       ng-class="{active: active_content=='deliveries'}" ng-click="setActiveContent('deliveries')">
-      发件箱
-    </a>
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-dark" ng-click="gobackHome()">
+      <i class="icon ion-ios-arrow-left"></i>
+      返回
+    </button>
+  </ion-nav-buttons>
+
+  <div class="loader-center" ng-if="!doneLoading">
+    <div class="loader">
+      <i class="icon ion-loading-c"></i>
+    </div>
   </div>
-  <!--
-  <ion-content ng-init="loadEmails()" class="has-header" ng-show="active_content=='orders'">
-    <ion-list>
-      <div class="card card-margin" ng-repeat="email in emails" item="item">
-        <ion-item class="item item-remove-animate item-thumbnail-left">
-          <image ui-sref="event({eventId:email.id})" src="http://lorempixel.com/200/200/people"></image>
-          <p class="feedtext">
-            <span class="name">Lorem ipsum</span>
-            <span>is going to</span>
-            <span class="event" ui-sref="event({eventId:email.id})">is going to </span>
-          </p>
-          <div><i class="icon ion-clock"></i> 2015-10-24</div>
-          <div><i class="icon ion-earth"></i> 只有砖石会员才能看信内容</div>
 
-          <button class="button button-dark button-clear icon ion-chevron-up" ng-click="sendback($index)" >查看</button>
-          <button class="button button-dark button-clear icon ion-chevron-down" ng-click="sendback($index)">回复</button>
-          <span class="like">&nbsp&nbsp 45 Likes this</span>
+  <ion-content has-bouncing="true" class="has-header has-footer"
+               delegate-handle="userMessageScroll">
 
-          <ion-option-button class="button-assertive" ng-click="">
-            Delete
-          </ion-option-button>
-        </ion-item>
+    <div ng-repeat="message in messages" class="message-wrapper"
+         on-hold="onMessageHold($event, $index, message)">
+
+      <div ng-if="user._id !== message.userId">
+
+        <img ng-click="viewProfile(message)" class="profile-pic left"
+             ng-src="{{toUser.pic}}" onerror="onProfilePicError(this)" />
+
+        <div class="chat-bubble left">
+
+          <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+          </div>
+
+          <div class="message-detail">
+                              <span ng-click="viewProfile(message)"
+                                    class="bold">{{toUser.username}}</span>,
+            <span am-time-ago="message.date | amFromUnix"></span>
+          </div>
+
+        </div>
       </div>
-    </ion-list>
-    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="" distance="30%"></ion-infinite-scroll>
+
+      <div ng-if="user._id === message.userId">
+
+        <img ng-click="viewProfile(message)" class="profile-pic right"
+             ng-src="{{user.pic}}" onerror="onProfilePicError(this)" />
+
+        <div class="chat-bubble right">
+
+          <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+          </div>
+
+          <div class="message-detail">
+                              <span ng-click="viewProfile(message)"
+                                    class="bold">{{user.username}}</span>,
+            <span am-time-ago="message.date | amFromUnix"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="cf"></div>
+
+    </div>
   </ion-content>
-  -->
-   <ion-content ng-init="" has-header="true" ng-show="active_content=='orders'">
-     <ion-list>
-       <ion-item class="item-remove-animate item-thumbnail-left" collection-repeat="email in emails" type="item-text-wrap" >
-         <img class ="myavatar" ui-sref="event({eventId:email.id})" ng-src="{{email.src}}">
-         <p class="pos-absolute-right">2015-10-24</p>
-         <h2>{{email.name}}你才是大傻逼xx</h2>
 
-         <p><span class="assertive">只有砖石会员才能看信内容</span></p>
-         <span class="positive" ui-sref="event({eventId:email.id})">请立即升级砖石会员</span>
+  <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
+    <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+      <label class="item-input-wrapper">
+        <textarea ng-model="input.message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+      </label>
+      <div class="footer-btn-wrap">
+        <button class="button button-icon icon ion-android-send footer-btn" type="submit"
+                ng-disabled="!input.message || input.message === ''">
+        </button>
+      </div>
+    </ion-footer-bar>
+  </form>
 
-         <button class="button button-outline button-small button-positive pos-absolute-right" ng-click="sendback($index)">
-           回复
-         </button>
-
-         <ion-option-button class="button-assertive" ng-click="">
-           Delete
-         </ion-option-button>
-       </ion-item>
-     </ion-list>
-   </ion-content>
-
-  <ion-content ng-init="loadSendEmails()" has-header="true" ng-show="active_content=='deliveries'">
-    <ion-list>
-      <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="email in sendemails" type="item-text-wrap" href="#">
-        <img class ="myavatar" ng-src="{{email.src}}">
-        <p class="pos-absolute-right">2015-10-24</p>
-        <h2>{{email.name}}</h2>
-        <br>
-        <span>{{email.lastText}}</span>
-        <ion-option-button class="button-assertive" ng-click="">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
-  </ion-content>
 </ion-view>

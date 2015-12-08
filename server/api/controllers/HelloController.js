@@ -15,6 +15,7 @@ module.exports = {
             //if(data.length == 0) return res.notFound();
             for(var i = 0; i <data.length; i++){
                 data[i].fromuserid = virtualization.varatr([data[i].fromuserid], null)[0];
+                data[i].addtime = phpDate.date("Y-m-d", data[i].addtime);
             }
             return res.json(data);
         });
@@ -23,14 +24,14 @@ module.exports = {
     respond: function(req, res){
 
         var token = req.token;
-        var today = new Date();
+
         Hello.create({
             userid: req.body.userid,
             fromuserid: token.user.userid,
             sign: 0,
             reback: 0,
             message: req.body.message,
-            addtime: today
+            addtime: phpDate.time()
         }).exec(function(err, data){
             if(err) return res.badRequest();
 

@@ -37,14 +37,14 @@ module.exports = {
                           sort: 'id DESC'
     }).then(function (ua){
           if (ua) {
-            return Seen.update({id: ua.id}, {addtime: Date.now(),sign: 0});
+            return Seen.update({id: ua.id}, {addtime: phpDate.time(),sign: 0});
           } else {
             // Seen does not exist. Create.
             return Seen.create({
               userid: userid,
               fromuserid: fromuserid,
               sign: 0,
-              addtime: Date.now()
+              addtime: phpDate.time()
             });
           }
         });
