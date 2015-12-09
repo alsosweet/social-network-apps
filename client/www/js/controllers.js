@@ -30,7 +30,7 @@ angular.module('starter.controllers', ['compareTo'])
 
     myInfo.updateFromServer(1);
     myInfo.updateFromServer(2);
-
+    myInfo.updateFromServer(3);
   }
 )
 .controller('LoginCtrl', function($scope, $http, $state, $rootScope, AuthenticationService, Loader) {
@@ -168,8 +168,60 @@ angular.module('starter.controllers', ['compareTo'])
       });
     });
   })
-.controller('EmailsCtrl', function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, Chats) {
-    $location.path('/messages');
+.controller('EmailsCtrl', function($scope, AuthFactory, $rootScope, $location, $timeout, UserFactory, Loader, msgCenter, myInfo) {
+
+    $scope.active_content = 'orders';
+    $scope.setActiveContent = function(str){
+      $scope.active_content = str;
+    }
+    $scope.delete = function(message){
+      UserFactory.messageDelete(message).success(function (data, status, headers, config) {
+
+        console.log('message delete ok:'+status);
+        $scope.messages.splice($scope.messages.indexOf(message), 1);
+        msgCenter.set({emails:msgCenter.get().emails -1});
+      });
+    }
+
+    $scope.deleteSendMessage = function(message){
+      UserFactory.messageDelete(message).success(function (data, status, headers, config) {
+
+        console.log('sendboxmessages delete ok:'+status);
+        $scope.sendboxmessages.splice($scope.sendboxmessages.indexOf(message), 1);
+      });
+    }
+
+    $rootScope.$on('event:refresh sendbox', function(){
+      UserFactory.getSendMessage().success(function (data, status, headers, config) {
+        $scope.sendboxmessages = data;
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    });
+
+    $rootScope.$broadcast('event:refresh sendbox');
+
+    $scope.respond = function(message){
+      //$location.path('/messages');
+    }
+
+    var wait = 0;
+
+    $scope.messagesRefresh = function(){
+      myInfo.updateFromServer(3); //get messages
+      wait = 1;
+    }
+    $scope.sendboxRefresh = function(){
+      $rootScope.$broadcast('event:refresh sendbox');
+    }
+    $rootScope.$on('event:someone sent you message', function(){
+      $scope.messages = myInfo.getMessages();
+      if(wait == 1){
+        $scope.$broadcast('scroll.refreshComplete');
+        wait = 0;
+      }
+    });
+
+    myInfo.updateFromServer(3); //get messages
 })
   .controller('EmailDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
@@ -295,118 +347,90 @@ angular.module('starter.controllers', ['compareTo'])
       $scope.userinfo = data.UserInfo[0];
       //$scope.$broadcast('getUserInfo');
     }).error(function (data, status, headers, config) {
-        console.log("Error occurred.  Status:" + status);
-        Loader.hideLoading();
-        Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
-        $ionicHistory.goBack();
-      });
+      console.log("Error occurred.  Status:" + status);
+      Loader.hideLoading();
+      Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+      $ionicHistory.goBack();
+    });
 
-      // A confirm dialog
-      $scope.showConfirm = function() {
-        var confirmPopup = $ionicPopup.confirm({
-          title: '查看QQ(微信)号',
-          template: '钻石会员才能查看QQ或微信号，你还不是钻石会员'
-        }).then(function(res) {
-          if(res) {
-            console.log('You are sure');
-          } else {
-            console.log('You are not sure');
-          }
-        });
-      };
-
-      $scope.applyMeet = function(){
-        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请!');
-      }
-
-      $scope.relationship = false;
-      $scope.openModal = function(tempobj, animation) {
-          $ionicModal.fromTemplateUrl(tempobj.url, {
-            scope: $scope,
-            animation: animation
-          }).then(function(modal) {
-            $scope.modal = modal;
-            $scope.modal.show();
-          });
-
-        //Cleanup the modal when we're done with it!
-        $scope.$on('$destroy', function() {
-          console.log('Modal is $destroy!');
-          $scope.modal.remove();
-        });
-        // Execute action on hide modal
-        $scope.$on('modal.hide', function() {
-          // Execute action
-          console.log('Modal is hide!');
-        });
-        // Execute action on remove modal
-        $scope.$on('modal.removed', function() {
-          // Execute action
-          console.log('Modal is removed!');
-        });
-        $scope.$on('modal.shown', function() {
-          console.log('Modal is shown!');
-        });
-
-      };
-
-      $scope.closeModal = function() {
-        console.log('Modal is closeModal!');
-        $scope.modal.hide();
-      };
-
-      var tempobj={};
-      tempobj.url = 'templates/image-modal.html';
-
-      //需要用promise或其他方法，否则加载完成前显示默认图片
-      $scope.imageSrc = 'http://ionicframework.com/image/ionic-logo-blog.png';
-
-      $scope.showImage = function(index) {
-        switch(index) {
-          case 1:
-            $scope.imageSrc = 'http://ionicframework.com/image/ionic-logo-blog.png';
-            break;
-          case 2:
-            $scope.imageSrc  = 'http://ionicframework.com/image/ionic_logo.svg';
-            break;
-          case 3:
-            $scope.imageSrc  = $scope.userinfo.avatar;
-            break;
+    // A confirm dialog
+    $scope.showConfirm = function () {
+      var confirmPopup = $ionicPopup.confirm({
+        title: '查看QQ(微信)号',
+        template: '钻石会员才能查看QQ或微信号，你还不是钻石会员'
+      }).then(function (res) {
+        if (res) {
+          console.log('You are sure');
+        } else {
+          console.log('You are not sure');
         }
-        $scope.openModal(tempobj, 'slide-in-up');
-      }
+      });
+    };
 
-
-      //gift
-      $scope.gifts=[];
-      for(var i = 1; i<=15; i++){
-        $scope.gifts.push({
-          src:'image/gift/'+i+'.gif'
-        });
-      }
-
-      var tempobj1={};
-      tempobj1.url = 'templates/say-hi.html';
-
-      $scope.sayhi = function(){
-          $scope.openModal(tempobj1, 'slide-in-up');
-      }
-
+    $scope.applyMeet = function () {
+      Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请!');
     }
-  )
-.controller('EmailSendingCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams) {
+
+    $scope.relationship = false;
+
+    $ionicModal.fromTemplateUrl('templates/say-hi.html', function (modal) {
+        $scope.sayhiModal = modal;
+      },
+      {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+      }
+    );
+    //Be sure to cleanup the modal by removing it from the DOM
+    $scope.$on('$destroy', function () {
+      $scope.sayhiModal.remove();
+    });
+    $scope.hide = function () {
+      $scope.sayhiModal.hide();
+    }
+
+    $scope.name = {idx: 1};//Two-way binding works best with a nested object in ng-model
+
+    $scope.showSayhi = function () {
+      UserFactory.getZhaohu().success(function (data, status, headers, config) {
+        if (status == 200) {
+          $scope.hi = data.zhaohu;
+          $scope.sayhiModal.show();
+
+          $scope.submit = function (idx) {
+
+            UserFactory.helloRespond({
+              message: idx,
+              userid: $stateParams.eventId,
+            }).success(function (data, status, headers, config) {
+              if (status == 200) {
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+ )
+.controller('EmailSendingCtrl',function ($scope, $rootScope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, UserFactory, msgCenter, myInfo) {
 
       var sendId = $stateParams.sendId;
-
-      $scope.applyMeet = function(){
-        Loader.toggleLoadingWithMessage('已发送申请见面请求，请不要重复申请');
-      }
-
+      $scope.notice = {message: ""};
 
       $scope.sendEmail = function() {
         console.log(sendId);
+        UserFactory.messageRespond({message: $scope.notice.message, userid: sendId, messageid:$stateParams.messageid}).success(function (data, status, headers, config) {
+          if(status == 200){
+            console.log('messageRespond ok:'+status);
+            $scope.notice.message = "";
+            msgCenter.set({emails:msgCenter.get().emails -1});
+            myInfo.updateFromServer(3);
+            $rootScope.$broadcast('event:refresh sendbox');
+            Loader.toggleLoadingWithMessage("发送成功");
+          }
+        });
       }
-
     }
 )
 .controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {

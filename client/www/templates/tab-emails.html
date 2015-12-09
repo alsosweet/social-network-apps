@@ -1,80 +1,50 @@
-<ion-view id="userMessagesView"  hide-back-button="true"
-          view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i> <div class='msg-header-username'>{{toUser.username}}</div>">
+<ion-view view-title="我的收信" class="view-tabs-top">
 
-  <ion-nav-buttons side="left">
-    <button class="button button-clear button-dark" ng-click="gobackHome()">
-      <i class="icon ion-ios-arrow-left"></i>
-      返回
-    </button>
-  </ion-nav-buttons>
-
-  <div class="loader-center" ng-if="!doneLoading">
-    <div class="loader">
-      <i class="icon ion-loading-c"></i>
-    </div>
+  <div class="tabs tabs-top tabs-virtual">
+    <a href class="tab-item disable-user-behavior"
+       ng-class="{active: active_content=='orders'}" ng-click="setActiveContent('orders')">
+      收件箱
+    </a>
+    <a href class="tab-item disable-user-behavior"
+       ng-class="{active: active_content=='deliveries'}" ng-click="setActiveContent('deliveries')">
+      发件箱
+    </a>
   </div>
 
-  <ion-content has-bouncing="true" class="has-header has-footer"
-               delegate-handle="userMessageScroll">
+  <ion-content ng-init="" has-header="true" ng-show="active_content=='orders'">
+    <ion-refresher pulling-text="向下拉更新..." on-refresh="messagesRefresh()"></ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="message in messages" type="item-text-wrap" >
+        <img class ="myavatar" ui-sref="event({eventId:message.fromuserid.userid})" ng-src="{{message.fromuserid.avatar}}">
+        <p class="pos-absolute-right">{{message.addtime}}</p>
+        <h2>{{message.fromuserid.username}}</h2>
 
-    <div ng-repeat="message in messages" class="message-wrapper"
-         on-hold="onMessageHold($event, $index, message)">
-
-      <div ng-if="user._id !== message.userId">
-
-        <img ng-click="viewProfile(message)" class="profile-pic left"
-             ng-src="{{toUser.pic}}" onerror="onProfilePicError(this)" />
-
-        <div class="chat-bubble left">
-
-          <div class="message" ng-bind-html="message.text | nl2br" autolinker>
-          </div>
-
-          <div class="message-detail">
-                              <span ng-click="viewProfile(message)"
-                                    class="bold">{{toUser.username}}</span>,
-            <span am-time-ago="message.date | amFromUnix"></span>
-          </div>
-
-        </div>
-      </div>
-
-      <div ng-if="user._id === message.userId">
-
-        <img ng-click="viewProfile(message)" class="profile-pic right"
-             ng-src="{{user.pic}}" onerror="onProfilePicError(this)" />
-
-        <div class="chat-bubble right">
-
-          <div class="message" ng-bind-html="message.text | nl2br" autolinker>
-          </div>
-
-          <div class="message-detail">
-                              <span ng-click="viewProfile(message)"
-                                    class="bold">{{user.username}}</span>,
-            <span am-time-ago="message.date | amFromUnix"></span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="cf"></div>
-
-    </div>
+        <p  ng-hide="message.sign"><span class="assertive">只有砖石会员才能看信内容</span></p>
+        <span  ng-hide="message.sign" class="positive" ui-sref="event({eventId:message.fromuserid.userid})">请立即升级砖石会员</span>
+        <span ng-show="message.sign" class="positive">{{message.message}}</span>
+        <button ng-hide="message.sign" class="button button-outline button-small button-positive pos-absolute-right" ui-sref="emailSending({sendId:message.fromuserid.userid, messageid: message.id})">
+          回复
+        </button>
+        <ion-option-button class="button-assertive" ng-click="delete(message)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
   </ion-content>
 
-  <form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
-    <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
-      <label class="item-input-wrapper">
-        <textarea ng-model="input.message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
-      </label>
-      <div class="footer-btn-wrap">
-        <button class="button button-icon icon ion-android-send footer-btn" type="submit"
-                ng-disabled="!input.message || input.message === ''">
-        </button>
-      </div>
-    </ion-footer-bar>
-  </form>
-
+  <ion-content has-header="true" ng-show="active_content=='deliveries'">
+    <ion-refresher pulling-text="向下拉更新..." on-refresh="sendboxRefresh()"></ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-thumbnail-left" ng-repeat="message in sendboxmessages" type="item-text-wrap" href="#">
+        <img class ="myavatar"ui-sref="event({eventId:message.userid.userid})" ng-src="{{message.userid.avatar}}">
+        <p class="pos-absolute-right">{{message.addtime}}</p>
+        <h2>{{message.userid.username}}</h2>
+        <br>
+        <span>{{message.message}}</span>
+        <ion-option-button class="button-assertive" ng-click="deleteSendMessage(message)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
 </ion-view>

@@ -243,6 +243,21 @@ angular.module('starter.factory', [])
           return $http.get(base + '/qing_zhaohu/viewzhaohu');
         },
 
+        messageDelete:function(message){
+          return $http.post(base + '/message/del', message);
+        },
+
+        getMessages: function(){
+          return $http.get(base + '/message/message');
+        },
+        messageRespond: function(message) {
+          return $http.post(base + '/message/respond', message);
+        },
+
+        getSendMessage: function(){
+          return $http.get(base + '/message/sendmessage');
+        },
+
         addToCart: function(book) {
           var userId = AuthFactory.getUser()._id;
           return $http.post(base + '/api/v1/users/' + userId + '/cart', book);

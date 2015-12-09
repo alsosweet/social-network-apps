@@ -9,6 +9,7 @@ angular.module('starter', [
   'ionic',
   'LocalStorageModule',
   'elastichat',
+  'angularMoment',
   'starter.controllers',
   'starter.services',
   'starter.factory'])
@@ -56,8 +57,25 @@ angular.module('starter', [
 })
   .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
+    // configure moment relative time
+    moment.locale('en', {
+      relativeTime: {
+        future: "in %s",
+        past: "%s以前",
+        s: "%d秒",
+        m: "1分钟",
+        mm: "%d分钟",
+        h: "1小时",
+        hh: "%d小时",
+        d: "1天",
+        dd: "%d天",
+        M: "1个月",
+        MM: "%d个月",
+        y: "1年",
+        yy: "%d年"
+      }
+    });
   })
-
 .config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -87,17 +105,17 @@ angular.module('starter', [
   })
     .state('tab.emails', {
       url: '/emails',
-      cache: false, //另一种方法就是在html文件加入cache-view="false"
+      //cache: false, //另一种方法就是在html文件加入cache-view="false"
       views: {
         'tab-emails': {
-          //templateUrl: 'templates/tab-emails.html',
+          templateUrl: 'templates/tab-emails.html',
           controller: 'EmailsCtrl'
         }
       }
     })
   .state('messages', {
       url: '/messages',
-      templateUrl: 'templates/tab-emails.html',
+      templateUrl: 'templates/chatbox.html',
       controller: 'UserMessagesCtrl'
     })
     .state('tab.email-detail', {
@@ -162,7 +180,7 @@ angular.module('starter', [
       controller: 'FirstShowCtrl'
     })
     .state('emailSending', {
-      url: '/emailSending/:sendId',
+      url: '/emailSending/:sendId/:messageid',
       templateUrl: 'templates/email-sending.html',
       controller: 'EmailSendingCtrl'
     });

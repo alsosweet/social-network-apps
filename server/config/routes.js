@@ -43,7 +43,8 @@ module.exports.routes = {
   'post /seen':'SeenController.clearSeen',
   'post /hello/respond':'HelloController.respond',
   'post /hello/del':'HelloController.del',
-
+  'post /message/respond':'MessageController.respond',
+  'post /message/del':'MessageController.del',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

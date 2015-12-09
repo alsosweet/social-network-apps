@@ -135,10 +135,10 @@
   <div class="bar bar-footer bar-light footer-buttons">
     <div class="row">
       <div class="col">
-        <button class="button button-clear icon-left ion-ios-paperplane-outline" ng-click="sayhi()">打招呼</button>
+        <button class="button button-clear icon-left ion-ios-paperplane-outline" ng-click="showSayhi()">打招呼</button>
       </div>
       <div class="col">
-        <button class="button button-clear icon-left ion-ios-email-outline" ui-sref="emailSending({sendId:12})">写私信</button>
+        <button class="button button-clear icon-left ion-ios-email-outline" ui-sref="emailSending({sendId:userinfo.userid})">写私信</button>
       </div>
       <div class="col">
         <button class="button button-clear icon-left ion-ios-upload-outline" ng-click="showImage(2)">送礼物</button>

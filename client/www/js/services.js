@@ -35,8 +35,11 @@ angular.module('starter.services', ['http-auth-interceptor'])
   };
 })
 .factory('myInfo', function($http, $rootScope,  localStorageService, msgCenter, UserFactory, Loader) {
+
   var user;
   var seen;
+  var messages;
+  var hellos;
 
   return {
     get: function() {
@@ -91,6 +94,21 @@ angular.module('starter.services', ['http-auth-interceptor'])
             Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
           });
           break;
+
+        case 3:
+          UserFactory.getMessages().success(function (data, status, headers, config) {
+            messages = data;
+            var n = 0;
+            for(var i = 0; i<data.length; i++){
+              if(data[i].sign == 0) n++;
+            }
+            msgCenter.set({emails: n});
+            $rootScope.$broadcast('event:someone sent you message');
+
+          }).error(function (data, status, headers, config) {
+            Loader.toggleLoadingWithMessage("加载失败，请检查网络问题");
+          });
+          break;
         default :
               break;
       }
@@ -102,8 +120,11 @@ angular.module('starter.services', ['http-auth-interceptor'])
 
     getHellos: function(){
       return hellos;
-    }
+    },
 
+    getMessages: function(){
+      return messages;
+    },
   };
 })
 .factory('Chats', function() {

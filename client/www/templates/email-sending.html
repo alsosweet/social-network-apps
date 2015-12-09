@@ -19,10 +19,10 @@
   <h5 class="assertive">钻石会员发信，普通会员免费查看</h5>
   <h4 class="positive">马上升级钻石会员</h4>
     <label class="item item-input">
-      <textarea rows="12" cols="40" ng-model="input.message" value="" placeholder="Send a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+      <textarea rows="12" cols="40" ng-model="notice.message" value="" placeholder="Send a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
     </label>
     <div class="">
-      <button ng-click="sendEmail()" class="button button-block button-light">
+      <button ng-click="sendEmail();$ionicGoBack()" class="button button-block button-light">
         发送
       </button>
     </div>

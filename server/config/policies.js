@@ -52,6 +52,13 @@ module.exports.policies = {
     'hello':['tokenAuth'],
     'respond':['tokenAuth'],
     'del':['tokenAuth', 'ownUser'],
+  },
+  'MessageController':{
+    '*':false,
+    'message':['tokenAuth'],
+    'sendmessage':['tokenAuth'],
+    'respond':['tokenAuth'],
+    'del':['tokenAuth', 'ownUser'],
   }
   /***************************************************************************
   *                                                                          *

@@ -7,6 +7,10 @@
     <file url="file://$PROJECT_DIR$/client/www/js/app.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/www/js/factory.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/www/js/services.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client/www/lib/0.15.0-Autolinker.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client/www/lib/0.8.2-angular-moment.min.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client/www/lib/2.4.2-angular-elastic.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client/www/lib/2.8.4-moment.min.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/www/lib/angular-http-auth/src/http-auth-interceptor.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/www/lib/compareTo.module.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/www/templates/login.html" charset="UTF-8" />

@@ -142,8 +142,8 @@ img.profile-pic.right {
 }
 
 input, textarea, .item-input, .item-input-wrapper {
-  background-color: #f4f4f4 !important;
-}
+   background-color: #f4f4f4 !important;
+ }
 
 .bold {
   font-weight: bold;
