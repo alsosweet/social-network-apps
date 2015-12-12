@@ -69,5 +69,28 @@ module.exports = {
 
         });
     },
+
+    checkin: function(req, res){
+
+        var token = req.token;
+
+        UserInfo.findOne({userid:token.user.userid}).exec(function(e, r){
+            if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
+            if (!r) return res.notFound();
+
+            if(phpDate.time() - r.checkintime < 24*60*60){
+                return res.json({statCode: 1});
+            }
+            UserInfo.update({userid:token.user.userid},{point: r.point+10, checkintime: phpDate.time()}).exec(function(err, data){
+                if(err) return res.badRequest();
+                UserInfo.findOne({userid:token.user.userid}).populate('city').populate('gifts').exec(function(e, r){
+                    if(e) return sails.log.error('viewUserInfo:when find one userinfo,an error occured Details:',e);
+                    if (!r) return res.notFound();
+
+                    return res.json({statCode: 0, info: r});
+                });
+            });
+        });
+    }
 };
 

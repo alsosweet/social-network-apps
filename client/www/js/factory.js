@@ -257,7 +257,9 @@ angular.module('starter.factory', [])
         getSendMessage: function(){
           return $http.get(base + '/message/sendmessage');
         },
-
+        checkin: function(){
+          return $http.post(base + '/checkin');
+        },
         addToCart: function(book) {
           var userId = AuthFactory.getUser()._id;
           return $http.post(base + '/api/v1/users/' + userId + '/cart', book);

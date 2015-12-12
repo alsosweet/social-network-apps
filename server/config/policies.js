@@ -31,6 +31,7 @@ module.exports.policies = {
   'UserInfoController': {
     'info': ['tokenAuth'],
     'UserPage': true,
+    'checkin':['tokenAuth'],
     '*': false
   },
 

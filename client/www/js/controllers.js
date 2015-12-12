@@ -302,9 +302,28 @@ angular.module('starter.controllers', ['compareTo'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
-.controller('ProfileCtrl', function($scope,$rootScope, $state, $ionicHistory, $stateParams, myInfo, UserFactory, Loader, msgCenter) {
+.controller('ProfileCtrl', function($scope,$rootScope, $state, $ionicHistory, $stateParams, myInfo, UserFactory, Loader, msgCenter, localStorageService) {
 
     $scope.info = myInfo.get();
+
+    $scope.$on('event:myinfo changed', function(){
+      $scope.info = myInfo.get();
+      if(!$scope.$$phase) {
+        //$digest or $apply
+        $scope.$digest();
+      }
+    });
+
+    $scope.checkin = function(){
+      UserFactory.checkin().success(function (data, status, headers, config) {
+        if((status == 200)&&(data.statCode == 0)){
+          localStorageService.set('MyInfo', data.info);
+          $rootScope.$broadcast('event:myinfo changed');
+        }else if((status == 200)&&(data.statCode == 1)){
+          Loader.toggleLoadingWithMessage("今天已经签到了，不必重复签到");
+        }
+      });
+    }
 
     $scope.$on('$ionicView.enter', function() {
       var tmp = msgCenter.get();
@@ -373,6 +392,21 @@ angular.module('starter.controllers', ['compareTo'])
 
     $scope.relationship = false;
 
+    $ionicModal.fromTemplateUrl('templates/image-modal.html', function (modal) {
+        $scope.imageModal = modal;
+      },
+      {
+        scope: $scope,
+        animation: 'slide-in-up',
+      }
+    );
+    $scope.imageShow = function(){
+      $scope.imageModal.show();
+    }
+    $scope.imageHide = function () {
+      $scope.imageModal.hide();
+    }
+
     $ionicModal.fromTemplateUrl('templates/say-hi.html', function (modal) {
         $scope.sayhiModal = modal;
       },
@@ -385,6 +419,7 @@ angular.module('starter.controllers', ['compareTo'])
     //Be sure to cleanup the modal by removing it from the DOM
     $scope.$on('$destroy', function () {
       $scope.sayhiModal.remove();
+      $scope.imageModal.remove();
     });
     $scope.hide = function () {
       $scope.sayhiModal.hide();
@@ -441,7 +476,7 @@ angular.module('starter.controllers', ['compareTo'])
         $scope.data = {}
       // An elaborate, custom popup
       var myPopup = $ionicPopup.show({
-        template: '<input type="number" name="QQ" ng-model="data.wifi" ng-maxlength="4"><p ng-show="QQ.$error.maxlength">长度超过20.</p>',
+        template: '<form name = "qqFrom" novalidate><label class="item item-input"><input type="text" name="QQ" ng-model="data.qq" ng-maxlength="20" class=""></label></form><p class="assertive" ng-show="qqFrom.QQ.$error.maxlength">长度超过20.</p>',
         title: '请输入QQ号或微信号',
         scope: $scope,
         buttons: [
@@ -450,11 +485,11 @@ angular.module('starter.controllers', ['compareTo'])
             text: '<b>确定</b>',
             type: 'button-positive',
             onTap: function(e) {
-              if (!$scope.data.wifi) {
+              if (!$scope.data.qq) {
                 //don't allow the user to close unless he enters wifi password
                 e.preventDefault();
               } else {
-                return $scope.data.wifi;
+                return $scope.data.qq;
               }
             }
           }
@@ -464,8 +499,8 @@ angular.module('starter.controllers', ['compareTo'])
         console.log('Tapped!', res);
       });
       $timeout(function() {
-        myPopup.close(); //close the popup after 3 seconds for some reason
-      }, 30000);
+        myPopup.close(); //close the popup after 15 seconds for some reason
+      }, 15000);
     };
 
 

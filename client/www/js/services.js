@@ -49,8 +49,9 @@ angular.module('starter.services', ['http-auth-interceptor'])
     set: function(data) {
       user = data;
       localStorageService.set('MyInfo', user);
-      $http.post(base+'/info/'+user.userid, user);
-      $rootScope.$broadcast('msg:user info changed');
+      $http.post(base+'/info/'+user.userid, user).success(function(data, status, headers, config){
+        $rootScope.$broadcast('event:myinfo changed');
+      });
     },
 
     updateFromServer: function(message) {

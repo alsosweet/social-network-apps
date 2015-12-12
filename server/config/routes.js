@@ -37,6 +37,7 @@ module.exports.routes = {
   },
   'get /info/:id?':'UserInfoController.info',
   'get /userpage/:page?':'UserInfoController.UserPage',
+  'post /checkin':'UserInfoController.checkin',
   'post /login':'AuthController.login',
   'post /register':'AuthController.register',
   'post /logout':'AuthController.logout',
