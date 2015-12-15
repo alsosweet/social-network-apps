@@ -27,21 +27,22 @@
         <span class="item-note positive my-item-note">未填写</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
       </a>
-      <a ng-click="showPopup2()" class="item item-icon-right my-item">
-        年龄
+      <ionic-datepicker input-obj="datepickerObject">
+        <a class="item item-icon-right my-item">
+          年龄
+          <span class="item-note positive my-item-note" ng-hide="birthday">未填写</span>
+          <span class="item-note positive my-item-note" ng-show="birthday">{{birthday|date:'yyyy/MM/dd'}}</span>
+          <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        </a>
+      </ionic-datepicker>
+      <a class="item item-icon-right my-item" modal-select hide-reset="true" ng-model="someModel" options="selectables" modal-title="学历">
+        学历
         <span class="item-note positive my-item-note">未填写</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
-      </a>
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Lightsaber
+        <div class="option">
+          {{option}}
         </div>
-        <select>
-          <option>Blue</option>
-          <option selected>Green</option>
-          <option>Red</option>
-        </select>
-      </label>
+      </a>
       <a href="#" class="item item-icon-right my-item">
         学历
         <span class="item-note positive my-item-note">未填写</span>

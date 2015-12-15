@@ -8,6 +8,7 @@
 angular.module('starter', [
   'ionic',
   'LocalStorageModule',
+  'ionic-modal-select',
   'elastichat',
   'angularMoment',
   'starter.controllers',

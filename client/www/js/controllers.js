@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['compareTo'])
+angular.module('starter.controllers', ['compareTo','ionic-datepicker'])
 .controller('TabCtrl', function($ionicModal, $location, $scope, msgCenter, myInfo) {
 
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
@@ -318,6 +318,7 @@ angular.module('starter.controllers', ['compareTo'])
       UserFactory.checkin().success(function (data, status, headers, config) {
         if((status == 200)&&(data.statCode == 0)){
           localStorageService.set('MyInfo', data.info);
+          Loader.toggleLoadingWithMessage("亲，积分+10~~！");
           $rootScope.$broadcast('event:myinfo changed');
         }else if((status == 200)&&(data.statCode == 1)){
           Loader.toggleLoadingWithMessage("今天已经签到了，不必重复签到");
@@ -502,6 +503,46 @@ angular.module('starter.controllers', ['compareTo'])
         myPopup.close(); //close the popup after 15 seconds for some reason
       }, 15000);
     };
+    var weekDaysList = ["日", "一", "二", "三", "四", "五", "六"];
+    var monthList = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+    var datePickerCallback = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+      } else {
+        console.log('Selected date is : ', val);
+        $scope.birthday = val;
+
+      }
+    };
+    $scope.datepickerObject = {
+      titleLabel: '生日',  //Optional
+      todayLabel: '今天',  //Optional
+      closeLabel: '关闭',  //Optional
+      setLabel: '确定',  //Optional
+      setButtonType : 'button-assertive',  //Optional
+      todayButtonType : 'button-assertive',  //Optional
+      closeButtonType : 'button-assertive',  //Optional
+      inputDate: new Date(),  //Optional
+      mondayFirst: true,  //Optional
+      //disabledDates: disabledDates, //Optional
+      weekDaysList: weekDaysList, //Optional
+      monthList: monthList, //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: new Date(1970, 1, 1), //Optional
+      to: new Date(2025, 12, 25),  //Optional
+      callback: function (val) {  //Mandatory
+        datePickerCallback(val);
+      },
+      dateFormat: 'yyyy-MM-dd', //Optional
+      closeOnSelect: false, //Optional
+    };
+
+    $scope.selectables = [
+      '中专', '本科', '硕士'
+    ];
 
 
 // Triggered on a button click, or some other target
