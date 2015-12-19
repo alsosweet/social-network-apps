@@ -469,9 +469,10 @@ angular.module('starter.controllers', ['compareTo','ionic-datepicker'])
       }
     }
 )
-.controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {
+.controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout, myInfo, RawData) {
 
       console.log('个人资料');
+      $scope.info = myInfo.get();
 // Triggered on a button click, or some other target
       $scope.showPopup = function() {
         $scope.data = {}
@@ -503,8 +504,7 @@ angular.module('starter.controllers', ['compareTo','ionic-datepicker'])
         myPopup.close(); //close the popup after 15 seconds for some reason
       }, 15000);
     };
-    var weekDaysList = ["日", "一", "二", "三", "四", "五", "六"];
-    var monthList = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+
     var datePickerCallback = function (val) {
       if (typeof(val) === 'undefined') {
         console.log('No date selected');
@@ -525,8 +525,8 @@ angular.module('starter.controllers', ['compareTo','ionic-datepicker'])
       inputDate: new Date(),  //Optional
       mondayFirst: true,  //Optional
       //disabledDates: disabledDates, //Optional
-      weekDaysList: weekDaysList, //Optional
-      monthList: monthList, //Optional
+      weekDaysList: RawData.weekDaysList, //Optional
+      monthList: RawData.monthList, //Optional
       templateType: 'popup', //Optional
       showTodayButton: 'true', //Optional
       modalHeaderColor: 'bar-positive', //Optional
@@ -540,10 +540,23 @@ angular.module('starter.controllers', ['compareTo','ionic-datepicker'])
       closeOnSelect: false, //Optional
     };
 
-    $scope.selectables = [
-      '中专', '本科', '硕士'
-    ];
+    $scope.selectCollageTables = RawData.selectCollageTables;
+    $scope.selectheightTables =  RawData.selectheightTables;
+    $scope.selectMarryTables =  RawData.selectMarryTables;
+    $scope.selectCareerTables =  RawData.selectCareerTables;
 
+    $scope.selectCareer =function(newValue, oldValue){
+      $scope.info.career = newValue;
+    };
+    $scope.selectMarry =function(newValue, oldValue){
+      $scope.info.marry = newValue;
+    };
+    $scope.selectCollage =function(newValue, oldValue){
+      $scope.info.collage = newValue;
+    };
+    $scope.selectHeight =function(newValue, oldValue){
+      $scope.info.height = newValue;
+    }
 
 // Triggered on a button click, or some other target
       $scope.showPopup2 = function() {

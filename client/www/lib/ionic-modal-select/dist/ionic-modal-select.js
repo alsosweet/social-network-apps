@@ -40,7 +40,7 @@ var modalSelectTemplates = modalSelectTemplates || {};modalSelectTemplates['moda
     '   <ion-pane class="">\n' +
     '    <ion-header-bar ng-class="::ui.headerFooterClass">\n' +
     '      <h1 class="title">{{::ui.modalTitle}}</h1>\n' +
-    '      <button class="button button-stable modal-select-close-button" ng-click="closeModal()">{{ui.cancelButton}}</button>\n' +
+    '      <button class="button button-clear button-positive modal-select-close-button button" ng-click="closeModal()">{{ui.cancelButton}}</button>\n' +
     '    </ion-header-bar>\n' +
     '\n' +
     '    <div class="bar bar-subheader item-input-inset" ng-class="::ui.subHeaderClass" ng-if="ui.hasSearch">\n' +
