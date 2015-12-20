@@ -8,6 +8,11 @@
   <ion-content class="padding">
     <div class="list card">
 
+      <button class="button button-full button-positive" ng-click="getImageSaveContact()">
+        Get Image and Save a Contact with It
+      </button>
+      <img ng-src="{{collection.myCroppedImage}}" style="width:100%; height: auto;"/>
+
       <a class="item item-thumbnail-left" href="#">
         <img ng-src="{{info.avatar}}">
         <h2>{{info.username}}</h2>

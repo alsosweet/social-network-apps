@@ -1,4 +1,5 @@
-var base = 'http://localhost:1337';
+//var base = 'http://localhost:1337';
+var base = 'http://192.168.199.235:1337';
 
 angular.module('starter.services', ['http-auth-interceptor'])
 .factory('msgCenter', function($http, $rootScope,  localStorageService) {
@@ -252,4 +253,17 @@ angular.module('starter.services', ['http-auth-interceptor'])
       }
     };
     return service;
+  })
+  .factory('RawData', function() {
+
+    return {
+      weekDaysList : ["日", "一", "二", "三", "四", "五", "六"],
+      monthList : ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+      selectCollageTables : [
+        '初中及以下','高中或中专','大专', '本科', '硕士','博士及以上'
+      ],
+      selectheightTables : ['155以下',155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,'190以上'],
+      selectMarryTables:['单身','未婚','已婚','离异'],
+      selectCareerTables:[],
+  };
   });

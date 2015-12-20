@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
     <title></title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
@@ -22,7 +23,9 @@
 
     <!--<script src="lib/socket.io.js"></script>-->
     <script src="lib/sails.io.js"></script>
-    <script>io.sails.url = "http://localhost:1337";</script>
+    <!--    <script>io.sails.url = "http://localhost:1337";</script>-->
+    <script>io.sails.url = "http://192.168.199.235:1337";</script>
+    <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -30,7 +33,10 @@
     <script src="lib/0.8.2-angular-moment.min.js"></script>
     <script src="lib/2.4.2-angular-elastic.js"></script>
     <script src="lib/0.15.0-Autolinker.js"></script>
+    <script src="lib/0.4.7-ng-img-crop.js"></script>
     <script src="lib/compareTo.module.js"></script>
+    <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+    <script src="lib/ionic-modal-select/dist/ionic-modal-select.js"></script>
     <!-- your app's js -->
     <script src="js/chat-controller.js"></script>
     <script src="js/app.js"></script>

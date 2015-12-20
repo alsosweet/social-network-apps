@@ -27,40 +27,49 @@
         <span class="item-note positive my-item-note">未填写</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
       </a>
-      <a ng-click="showPopup2()" class="item item-icon-right my-item">
-        年龄
-        <span class="item-note positive my-item-note">未填写</span>
-        <i class="icon my-icon ion-ios-arrow-right positive"></i>
-      </a>
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Lightsaber
-        </div>
-        <select>
-          <option>Blue</option>
-          <option selected>Green</option>
-          <option>Red</option>
-        </select>
-      </label>
-      <a href="#" class="item item-icon-right my-item">
+      <ionic-datepicker input-obj="datepickerObject">
+        <a class="item item-icon-right my-item">
+          年龄
+          <span class="item-note positive my-item-note" ng-hide="birthday">未填写</span>
+          <span class="item-note positive my-item-note" ng-show="birthday">{{birthday|date:'yyyy/MM/dd'}}</span>
+          <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        </a>
+      </ionic-datepicker>
+      <a class="item item-icon-right my-item" modal-select hide-reset="true" ng-model="collage" options="selectCollageTables" on-select="selectCollage(newValue, oldValue)" modal-title="学历">
         学历
-        <span class="item-note positive my-item-note">未填写</span>
+        <span class="item-note positive my-item-note " ng-hide="info.collage">未填写</span>
+        <span class="item-note positive my-item-note " ng-show="info.collage">{{info.collage}}</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        <div class="option">
+          {{option}}
+        </div>
       </a>
-      <a href="#" class="item item-icon-right my-item">
+      <a class="item item-icon-right my-item" modal-select hide-reset="true" ng-model="height" options="selectheightTables" on-select="selectHeight(newValue, oldValue)" modal-title="身高">
         身高
-        <span class="item-note positive my-item-note">未填写</span>
+        <span class="item-note positive my-item-note " ng-hide="info.height">未填写</span>
+        <span class="item-note positive my-item-note " ng-show="info.height">{{info.height}}cm</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        <div class="option">
+          {{option}}
+        </div>
       </a>
-      <a href="#" class="item item-icon-right my-item">
+      <a class="item item-icon-right my-item" modal-select hide-reset="true" ng-model="marry" options="selectMarryTables" on-select="selectMarry(newValue, oldValue)" modal-title="婚恋">
         婚恋
-        <span class="item-note positive my-item-note">未填写</span>
+        <span class="item-note positive my-item-note " ng-hide="info.marry">未填写</span>
+        <span class="item-note positive my-item-note " ng-show="info.marry">{{info.marry}}</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        <div class="option">
+          {{option}}
+        </div>
       </a>
-      <a href="#" class="item item-icon-right my-item">
+      <a class="item item-icon-right my-item" modal-select hide-reset="true" ng-model="career" options="selectCareerTables" on-select="selectCareer(newValue, oldValue)" modal-title="职业">
         职业
-        <span class="item-note positive my-item-note">未填写</span>
+        <span class="item-note positive my-item-note " ng-hide="info.career">未填写</span>
+        <span class="item-note positive my-item-note " ng-show="info.career">{{info.career}}</span>
         <i class="icon my-icon ion-ios-arrow-right positive"></i>
+        <div class="option">
+          {{option}}
+        </div>
       </a>
 
       <a href="#" class="item item-icon-right my-item">

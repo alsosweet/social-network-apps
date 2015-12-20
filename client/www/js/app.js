@@ -7,7 +7,9 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
   'ionic',
+  'ngCordova',
   'LocalStorageModule',
+  'ionic-modal-select',
   'elastichat',
   'angularMoment',
   'starter.controllers',

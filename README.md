@@ -76,7 +76,7 @@ use SQlite for both instead of local storage
 http-auth-interceptor:
 
 ================================================================================================
-mysql 数据库userinfo 中gifts属性改为int
+mysql 数据库userinfo 中gifts属性改为int.增加 checkintime
            hello 中的message改为int
            qing_zhaohu 中的id
 ================================================================================================

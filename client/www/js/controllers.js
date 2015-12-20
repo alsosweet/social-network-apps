@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['compareTo'])
+angular.module('starter.controllers', ['compareTo', 'ngImgCrop','ionic-datepicker'])
 .controller('TabCtrl', function($ionicModal, $location, $scope, msgCenter, myInfo) {
 
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
@@ -302,7 +302,66 @@ angular.module('starter.controllers', ['compareTo'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
-.controller('ProfileCtrl', function($scope,$rootScope, $state, $ionicHistory, $stateParams, myInfo, UserFactory, Loader, msgCenter, localStorageService) {
+.controller('ProfileCtrl', function($scope,$rootScope, $state, $ionicHistory, $stateParams, $cordovaImagePicker, $ionicModal, $ionicPlatform, myInfo, UserFactory, Loader, msgCenter, localStorageService) {
+
+    $scope.collection = {
+      selectedImage : '',
+      myCroppedImage : ''
+    };
+
+    $ionicModal.fromTemplateUrl('templates/image-picker.html', function(modal) {
+        $scope.imagePickerModal = modal;
+      },
+      {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }
+    );
+    //Be sure to cleanup the modal by removing it from the DOM
+    $scope.$on('$destroy', function() {
+      $scope.imagePickerModal.remove();
+    });
+
+    $ionicPlatform.ready(function() {
+
+      $scope.getImageSaveContact = function() {
+        // Image picker will load images according to these settings
+        var options = {
+          maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
+          width: 800,
+          height: 800,
+          quality: 90            // Higher is better(0-100)
+        };
+
+        $cordovaImagePicker.getPictures(options).then(function (results) {
+          // Loop through acquired images
+          for (var i = 0; i < results.length; i++) {
+            $scope.collection.selectedImage = results[i];   // We loading only one image so we can use it like this
+
+          }
+
+          window.plugins.Base64.encodeFile($scope.collection.selectedImage, function(base64){  // Encode URI to Base64 needed for contacts plugin
+            $scope.collection.selectedImage = base64;
+            console.log($scope.collection.selectedImage);
+            $scope.imagePickerModal.show();
+            //$scope.addContact();    // Save contact
+          });
+
+          $scope.imageCropOK = function(){
+            //
+            console.log($scope.collection.myCroppedImage);
+          }
+
+          $scope.imageCropCancal = function () {
+            $scope.imagePickerModal.hide();
+          }
+
+        }, function(error) {
+          console.log('Error: ' + JSON.stringify(error));    // In case of error
+        });
+      };
+
+    });
 
     $scope.info = myInfo.get();
 
@@ -318,6 +377,7 @@ angular.module('starter.controllers', ['compareTo'])
       UserFactory.checkin().success(function (data, status, headers, config) {
         if((status == 200)&&(data.statCode == 0)){
           localStorageService.set('MyInfo', data.info);
+          Loader.toggleLoadingWithMessage("亲，积分+10~~！");
           $rootScope.$broadcast('event:myinfo changed');
         }else if((status == 200)&&(data.statCode == 1)){
           Loader.toggleLoadingWithMessage("今天已经签到了，不必重复签到");
@@ -468,9 +528,10 @@ angular.module('starter.controllers', ['compareTo'])
       }
     }
 )
-.controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout) {
+.controller('PersonalInfoCtrl',function ($scope, $ionicModal, Loader, $ionicPopup, $state, $stateParams, $timeout, myInfo, RawData) {
 
       console.log('个人资料');
+      $scope.info = myInfo.get();
 // Triggered on a button click, or some other target
       $scope.showPopup = function() {
         $scope.data = {}
@@ -503,6 +564,58 @@ angular.module('starter.controllers', ['compareTo'])
       }, 15000);
     };
 
+    var datePickerCallback = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+      } else {
+        console.log('Selected date is : ', val);
+        $scope.birthday = val;
+
+      }
+    };
+    $scope.datepickerObject = {
+      titleLabel: '生日',  //Optional
+      todayLabel: '今天',  //Optional
+      closeLabel: '关闭',  //Optional
+      setLabel: '确定',  //Optional
+      setButtonType : 'button-assertive',  //Optional
+      todayButtonType : 'button-assertive',  //Optional
+      closeButtonType : 'button-assertive',  //Optional
+      inputDate: new Date(),  //Optional
+      mondayFirst: true,  //Optional
+      //disabledDates: disabledDates, //Optional
+      weekDaysList: RawData.weekDaysList, //Optional
+      monthList: RawData.monthList, //Optional
+      templateType: 'popup', //Optional
+      showTodayButton: 'true', //Optional
+      modalHeaderColor: 'bar-positive', //Optional
+      modalFooterColor: 'bar-positive', //Optional
+      from: new Date(1970, 1, 1), //Optional
+      to: new Date(2025, 12, 25),  //Optional
+      callback: function (val) {  //Mandatory
+        datePickerCallback(val);
+      },
+      dateFormat: 'yyyy-MM-dd', //Optional
+      closeOnSelect: false, //Optional
+    };
+
+    $scope.selectCollageTables = RawData.selectCollageTables;
+    $scope.selectheightTables =  RawData.selectheightTables;
+    $scope.selectMarryTables =  RawData.selectMarryTables;
+    $scope.selectCareerTables =  RawData.selectCareerTables;
+
+    $scope.selectCareer =function(newValue, oldValue){
+      $scope.info.career = newValue;
+    };
+    $scope.selectMarry =function(newValue, oldValue){
+      $scope.info.marry = newValue;
+    };
+    $scope.selectCollage =function(newValue, oldValue){
+      $scope.info.collage = newValue;
+    };
+    $scope.selectHeight =function(newValue, oldValue){
+      $scope.info.height = newValue;
+    }
 
 // Triggered on a button click, or some other target
       $scope.showPopup2 = function() {
